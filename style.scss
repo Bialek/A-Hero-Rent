@@ -16,8 +16,11 @@ $breakpoint-md: 1024px;
 }
 
 .header {
-    height: 100vh;
+    height: 100px;
     position: relative;
+    &--main {
+        height: 100vh;
+    }
     &__background {
         position: absolute;
         left: 0;
@@ -31,38 +34,127 @@ $breakpoint-md: 1024px;
 }
 
 .nav {
+    $this: &;
     display: flex;
     justify-content: space-between;
     padding: 20px;
     align-items: center;
+    position: relative;
     &__list {
         display: inline-flex;
         list-style: none;
+        @media screen and (max-width: $breakpoint-xs) {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            left: 0;
+            align-items: center;
+            background-color: $primaryColor;
+            height: 200vh;
+            transition: all ease-in-out .3s;
+            transform: translateX(-100%);
+        }
     }
     &__item {
         font-size: 1em;
         color: #fff;
-        transition: all ease-in-out .3s;
         cursor: pointer;
         text-transform: uppercase; 
-        position: relative;
-        &:not(:last-child) {
-            padding-right: 40px;      
-            &:after {
-                content: "";
-                position: absolute;
-                height: 180%;
-                width: 1px;
-                top: -40%;
-                right: 20px;
-                background-color: #fff;                
-            }      
+        position: relative;   
+        padding-right: 40px;        
+        &:after {
+            content: "";
+            position: absolute;
+            height: 180%;
+            width: 1px;
+            top: -40%;
+            right: 20px;
+            background-color: #fff;                
         }
-        &:hover {
-            color: $primaryColor;
+        @media screen and (min-width: $breakpoint-xs) {
+            transition: all ease-in-out .3s;
+            &:hover {
+                color: $primaryColor;
+            }   
+            &:last-child {  
+                padding: 0;
+                &:after {
+                    display: none;
+                }    
+            }
+        }
+        @media screen and (max-width: $breakpoint-xs) {
+            padding: 30px;
+            &:after {
+                height: 1px;
+                width: 80%;
+                top: 100%;
+                right: 10%;
+            }     
         }
     }
     &__logo {
         height: 50px;
+        padding-right: 20px;
+    }
+    &__mobile {
+        width: 35px;
+        height: 30px;
+        position: relative;
+        display: none;
+        @media screen and (max-width: $breakpoint-xs) {
+            display: block;
+        }
+    }
+    &__icon {
+        width:100%;
+        height: 4px;
+        background-color: #fff;
+        border-radius: 2px;
+        position: absolute;
+        transition: .5s ease-in-out;
+        top: 13px;
+        left: 0px;
+        cursor: pointer;
+        &:first-child {
+            top: 0;
+        }
+        &:last-child {
+            top: 26px;
+        }
+    }
+    &--active {
+        #{$this}__icon {
+            &:first-child {
+                top: 13px;
+                transform: rotate(45deg);
+            }
+            &:nth-child(2) {
+                transform: rotate(-45deg);
+            }
+            &:last-child {
+                opacity: 0;
+            }
+        }
+        #{$this}__list {
+            transform: translateX(0);
+        }
+    }
+}
+
+
+
+.footer {
+    display: flex;
+    justify-content: space-around;
+    background-color: $primaryColor;
+    flex-wrap: wrap;
+    &__description {
+        color: #fff;
+        padding: 12px 0;
+        font-size: .6em;
+        text-align: center;
     }
 }
