@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400');
 
 //varibles 
 $primaryColor: #261d52; 
@@ -10,13 +10,13 @@ $breakpoint-md: 1024px;
 
 * {
     font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
 .header {
-    height: 100px;
     position: relative;
     &--main {
         height: 100vh;
@@ -50,18 +50,15 @@ $breakpoint-md: 1024px;
             top: 100%;
             width: 100%;
             left: 0;
+            padding-bottom: 20px;
             align-items: center;
             background-color: $primaryColor;
-            height: 200vh;
             transition: all ease-in-out .3s;
             transform: translateX(-100%);
         }
     }
     &__item {
-        font-size: 1em;
-        color: #fff;
-        cursor: pointer;
-        text-transform: uppercase; 
+        cursor: pointer; 
         position: relative;   
         padding-right: 40px;        
         &:after {
@@ -94,6 +91,12 @@ $breakpoint-md: 1024px;
                 right: 10%;
             }     
         }
+    }
+    &__link {
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 1em;
+        color: #fff;
     }
     &__logo {
         height: 50px;
@@ -144,6 +147,22 @@ $breakpoint-md: 1024px;
     }
 }
 
+.form {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    &__header {
+        font-size: 1.8em;
+        text-align: center;
+    }
+    &__input {
+
+    }
+    &__btn {
+
+    }
+}
 
 
 .footer {
