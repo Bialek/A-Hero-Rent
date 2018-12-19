@@ -277,12 +277,210 @@ body {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  height: 500px;
 }
 
 .heroes__img {
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+  -o-object-position: top;
+     object-position: top;
+  height: 85%;
+}
+
+.heroes__header {
+  font-size: 2em;
+}
+
+.heroes__price {
+  font-size: 1em;
+}
+
+.hero {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 999;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.hero__wrapper {
+  width: 70%;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 10px;
+  position: relative;
+  padding: 3vh 8vh 6vh 3vh;
+}
+
+@media screen and (max-width: 1024px) {
+  .hero__wrapper {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    padding: 3vh 3vh 6vh 3vh;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .hero__wrapper {
+    width: 90%;
+    padding: 30px;
+  }
+}
+
+.hero__img {
+  max-width: 330px;
+  max-height: 330px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: top;
+     object-position: top;
+  margin-right: 5vh;
+}
+
+@media screen and (max-width: 1024px) {
+  .hero__img {
+    margin: 0 auto;
+  }
+}
+
+.hero__content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+@media screen and (max-width: 1024px) {
+  .hero__content {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    text-align: center;
+  }
+}
+
+.hero__header {
+  text-transform: uppercase;
+  font-size: 2.2em;
+  position: relative;
+  padding-bottom: 30px;
+}
+
+.hero__header:after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  height: 2px;
+  width: 3vh;
+  background-color: #bdad96;
+}
+
+.hero__description {
+  font-size: .8em;
+  color: #cfcfcf;
+}
+
+.hero__price {
+  padding: 15px 0;
+  margin: 15px 0;
+  font-size: 1em;
+  border-bottom: 1px dashed #cfcfcf;
+  border-top: 1px dashed #cfcfcf;
+  max-width: 275px;
+}
+
+.hero__btn {
+  max-width: 260px;
+  height: 50px;
+  background-color: #00aa54;
+  -webkit-transition: all ease-in-out .3s;
+  -o-transition: all ease-in-out .3s;
+  transition: all ease-in-out .3s;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  font-size: 1em;
+}
+
+.hero__btn:hover {
+  background-color: #261d52;
+}
+
+.hero__price, .hero__btn, .hero__img {
+  width: 100%;
+}
+
+.hero__close {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+@media screen and (max-width: 760px) {
+  .hero__close {
+    right: 5px;
+    top: 5px;
+  }
+}
+
+.hero__close:after, .hero__close:before {
+  content: "";
+  position: absolute;
+  bottom: 14px;
+  width: 100%;
+  height: 2px;
+  background-color: #cfcfcf;
+  -webkit-transition: all ease-in-out .3s;
+  -o-transition: all ease-in-out .3s;
+  transition: all ease-in-out .3s;
+}
+
+.hero__close:after {
+  -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  left: 0;
+}
+
+.hero__close:before {
+  -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+  left: 0;
+}
+
+.hero__close:hover:after, .hero__close:hover:before {
+  background-color: #000;
 }
 
 .form {

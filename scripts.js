@@ -51,11 +51,13 @@ const defaultHeroes = [
      
 ];
 
+localStorage.setItem('heroes', JSON.stringify(defaultHeroes));
+
 const innerHeroes = (array) => {
     document.querySelector('.main').innerHTML = `
         <div class="heroes">
             ${array.map((hero, k) => 
-                `<div key=${k} class="heroes__item" onclick="heroesDetail(${k})">
+                `<div key=${k} class="heroes__item" onclick="heroesDetails(${k})">
                     <img class="heroes__img" src=${hero.image} alt=${hero.name} />
                     <h1 class="heroes__header">${hero.name}</h1>
                     <p class="heroes__price">Cena Wynajmu ${hero.price} zł/h</p>
@@ -65,14 +67,26 @@ const innerHeroes = (array) => {
     `;
 }
 
-innerHeroes(defaultHeroes);
+innerHeroes(JSON.parse(localStorage.getItem('heroes')));
 
-const heroesDetail = (id) => {
-    console.log(id);
-    
-    // document.querySelector('body').innerHTML = `
-    //     <div class="hero">
-            
-    //     </div>
-    // `;
+const heroesDetails = (id) => {
+    const hero = JSON.parse(localStorage.getItem('heroes'))[id];
+    document.querySelector('body').insertAdjacentHTML('afterbegin', `
+        <div class="hero">
+            <div class="hero__wrapper">
+                <img class="hero__img" src=${hero.image} alt=${hero.name} />
+                <div class="hero__content">
+                    <h1 class="hero__header">i'm the ${hero.name}!</h1>
+                    <p class="hero__description">${hero.description}</p>
+                    <span class="hero__price">Cena Wynajmu: ${hero.price} zł/h</span>
+                    <button class="hero__btn">dodaj do koszyka</button>
+                </div>
+                <span onclick="closeDetails()" class="hero__close"></span>
+            </div>
+        </div>
+    `);
+}
+
+const closeDetails = () => {
+    document.querySelector('.hero').remove();
 }
