@@ -1,4 +1,4 @@
-document.querySelector('.nav__mobile').addEventListener('click', function() {
+document.querySelector('.nav__mobile').addEventListener('click', () => {
     const nav = document.querySelector('.nav');
     nav.classList.contains('nav--active') ? nav.classList.remove('nav--active') : nav.classList.add('nav--active');
     nav.style.width = document.width;
@@ -87,8 +87,6 @@ const heroesDetails = (id) => {
 }
 
 if (window.location.hash === '') {
-    console.log('work');
-    
     window.location.hash = '#/index.html';
 }
 
@@ -100,19 +98,43 @@ const update_url = (url) => {
     window.location.hash = url;
 }
 
-const renderAddHero = () => {
-    const 
+const renderAddHeroPage = () => {
+    document.querySelector('.main').innerHTML = `
+        <form class="form" onsubmit="addHero()">
+            <h1 class="form__header">Dodaj Herosa</h1>
+            <input name="name" class="form__input" type="text" placeholder="Nazwa Bohatera">
+            <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
+            <input name="price" class="form__input" type="text" placeholder="Cena wynajmu /h">
+            <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
+            <button class="form__btn" type="submit">Submit</button>
+        </form>
+    `
+}
+
+const addHero = () => {
+    event.preventDefault();
+    const oldHeroesArray = JSON.parse(localStorage.getItem('heroes'));
+
+    if ((oldHeroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
+        const newHero = {
+            name: event.target[0].value,
+            description: event.target[1].value,
+            image: event.target[2].value,
+            price: event.target[3].value,
+            isAvailable: true
+        }
+        const NewheroesArray = [...oldHeroesArray, newHero];
+        localStorage.setItem('heroes', JSON.stringify(NewheroesArray));
+    };  
 }
 
 const hashHandler = () => {
     const header = document.querySelector('.header');
-    console.log(window.location);
-    
     switch (window.location.hash) {
         case '#/add-hero.html':
            if (header.classList.contains('header--main')) header.classList.remove('header--main');    
-                
-            break;
+           renderAddHeroPage();     
+        break;
 
         default:
         case '#/index.html':

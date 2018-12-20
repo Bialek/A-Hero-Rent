@@ -261,6 +261,7 @@ body {
 }
 
 .heroes__item {
+  cursor: pointer;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
