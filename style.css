@@ -159,6 +159,7 @@ body {
 .nav__logo {
   height: 50px;
   padding-right: 20px;
+  cursor: pointer;
 }
 
 .nav__mobile {

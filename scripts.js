@@ -46,17 +46,16 @@ const defaultHeroes = [
         image: './images/batman.jpg',
         price: '2000',
         isAvailable: false
-     }
-    
-     
+     } 
 ];
 
 localStorage.setItem('heroes', JSON.stringify(defaultHeroes));
 
-const innerHeroes = (array) => {
+const innerHeroes = () => {
+    const heroes = JSON.parse(localStorage.getItem('heroes'));
     document.querySelector('.main').innerHTML = `
         <div class="heroes">
-            ${array.map((hero, k) => 
+            ${heroes.map((hero, k) => 
                 `<div key=${k} class="heroes__item" onclick="heroesDetails(${k})">
                     <img class="heroes__img" src=${hero.image} alt=${hero.name} />
                     <h1 class="heroes__header">${hero.name}</h1>
@@ -67,7 +66,7 @@ const innerHeroes = (array) => {
     `;
 }
 
-innerHeroes(JSON.parse(localStorage.getItem('heroes')));
+
 
 const heroesDetails = (id) => {
     const hero = JSON.parse(localStorage.getItem('heroes'))[id];
@@ -79,7 +78,7 @@ const heroesDetails = (id) => {
                     <h1 class="hero__header">i'm the ${hero.name}!</h1>
                     <p class="hero__description">${hero.description}</p>
                     <span class="hero__price">Cena Wynajmu: ${hero.price} zł/h</span>
-                    <button class="hero__btn">dodaj do koszyka</button>
+                    ${hero.isAvailable ? `<button class="hero__btn">dodaj do koszyka</button>` : `<span>bohater chwilo nie dostepny</span>`}
                 </div>
                 <span onclick="closeDetails()" class="hero__close"></span>
             </div>
@@ -87,6 +86,40 @@ const heroesDetails = (id) => {
     `);
 }
 
+if (window.location.hash === '') {
+    console.log('work');
+    
+    window.location.hash = '#/index.html';
+}
+
 const closeDetails = () => {
     document.querySelector('.hero').remove();
 }
+
+const update_url = (url) => {
+    window.location.hash = url;
+}
+
+const renderAddHero = () => {
+    const 
+}
+
+const hashHandler = () => {
+    const header = document.querySelector('.header');
+    console.log(window.location);
+    
+    switch (window.location.hash) {
+        case '#/add-hero.html':
+           if (header.classList.contains('header--main')) header.classList.remove('header--main');    
+                
+            break;
+
+        default:
+        case '#/index.html':
+            if (!(header.classList.contains('header--main'))) header.classList.add('header--main');
+            innerHeroes();
+        break;
+    }
+}
+
+window.addEventListener('hashchange', hashHandler, false);
