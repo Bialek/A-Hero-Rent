@@ -4,52 +4,55 @@ document.querySelector('.nav__mobile').addEventListener('click', () => {
     nav.style.width = document.width;
 });
 
-const defaultHeroes = [
-    {
-        name: 'Superman',
-        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-        image: './images/superman.jpg',
-        price: '3500',
-        isAvailable: true
-     },
-     {
-        name: 'Hulk',
-        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-        image: './images/hulk.jpg',
-        price: '25000',
-        isAvailable: false
-     },
-     {
-        name: 'Thor',
-        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-        image: './images/thor.jpg',
-        price: '55000',
-        isAvailable: true
-     },
-     {
-        name: 'Ironman',
-        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-        image: './images/ironman.jpg',
-        price: '75000',
-        isAvailable: true
-     },
-     {
-        name: 'Potter',
-        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-        image: './images/potter.jpg',
-        price: '125000',
-        isAvailable: true
-     },
-     {
-        name: 'Batman',
-        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-        image: './images/batman.jpg',
-        price: '2000',
-        isAvailable: false
-     } 
-];
+const loadDefaultHeroes = () => {
+    const defaultHeroes = [
+        {
+            name: 'Superman',
+            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+            image: './images/superman.jpg',
+            price: '3500',
+            isAvailable: true
+         },
+         {
+            name: 'Hulk',
+            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+            image: './images/hulk.jpg',
+            price: '25000',
+            isAvailable: false
+         },
+         {
+            name: 'Thor',
+            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+            image: './images/thor.jpg',
+            price: '55000',
+            isAvailable: true
+         },
+         {
+            name: 'Ironman',
+            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+            image: './images/ironman.jpg',
+            price: '75000',
+            isAvailable: true
+         },
+         {
+            name: 'Potter',
+            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+            image: './images/potter.jpg',
+            price: '125000',
+            isAvailable: true
+         },
+         {
+            name: 'Batman',
+            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+            image: './images/batman.jpg',
+            price: '2000',
+            isAvailable: false
+         } 
+    ];
+    localStorage.setItem('heroes', JSON.stringify(defaultHeroes));
+}
 
-localStorage.setItem('heroes', JSON.stringify(defaultHeroes));
+loadDefaultHeroes();
 
 const innerHeroes = () => {
     const heroes = JSON.parse(localStorage.getItem('heroes'));
@@ -65,7 +68,6 @@ const innerHeroes = () => {
         </div>
     `;
 }
-
 
 
 const heroesDetails = (id) => {
@@ -106,6 +108,7 @@ const renderAddHeroPage = () => {
             <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
             <input name="price" class="form__input" type="text" placeholder="Cena wynajmu /h">
             <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
+            <span class="form__communicate"></span>
             <button class="form__btn" type="submit">Submit</button>
         </form>
     `
@@ -113,19 +116,22 @@ const renderAddHeroPage = () => {
 
 const addHero = () => {
     event.preventDefault();
-    const oldHeroesArray = JSON.parse(localStorage.getItem('heroes'));
-
+    const oldHeroesArray = JSON.parse(localStorage.getItem('heroes'));      
+    const communicate = document.querySelector('.form__communicate')
     if ((oldHeroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
         const newHero = {
-            name: event.target[0].value,
-            description: event.target[1].value,
-            image: event.target[2].value,
-            price: event.target[3].value,
+            name: event.target[0].value,    
+            image: event.target[1].value,
+            price: event.target[2].value,
+            description: event.target[3].value,
             isAvailable: true
-        }
+        };
         const NewheroesArray = [...oldHeroesArray, newHero];
         localStorage.setItem('heroes', JSON.stringify(NewheroesArray));
-    };  
+        communicate.innerHTML="Bohater dodany do listy";
+    } else {
+        communicate.innerHTML="Bohater znajduje się już na liście";
+    } 
 }
 
 const hashHandler = () => {
@@ -134,13 +140,17 @@ const hashHandler = () => {
         case '#/add-hero.html':
            if (header.classList.contains('header--main')) header.classList.remove('header--main');    
            renderAddHeroPage();     
-        break;
+            break;
+
+        case '#/load-default-hero.html':
+            loadDefaultHeroes();
+            break;
 
         default:
         case '#/index.html':
             if (!(header.classList.contains('header--main'))) header.classList.add('header--main');
             innerHeroes();
-        break;
+            break;
     }
 }
 
