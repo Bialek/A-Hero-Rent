@@ -76,7 +76,8 @@ body {
     &__item {
         cursor: pointer; 
         position: relative;   
-        padding-right: 40px;        
+        padding-right: 40px; 
+        text-align: center;       
         &:after {
             content: "";
             position: absolute;
@@ -194,12 +195,24 @@ body {
         justify-content: start;
         align-items: center;
         height: 500px;
+        overflow: hidden;
     }
     &__img {
         width: 100%;
         object-fit: cover;
         object-position: top;
         height: 85%;
+        transition: all ease-in-out .3s;
+        &:hover {
+            transform: scale(1.2);
+        }      
+    }
+    &__textWrapper {
+        background-color: #fff;
+        width: 100%;
+        height: 15%;
+        z-index: 999;
+        text-align: center;
     }
     &__header {
         font-size: 2em;

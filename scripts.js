@@ -61,8 +61,10 @@ const innerHeroes = () => {
             ${heroes.map((hero, k) => 
                 `<div key=${k} class="heroes__item" onclick="heroesDetails(${k})">
                     <img class="heroes__img" src=${hero.image} alt=${hero.name} />
-                    <h1 class="heroes__header">${hero.name}</h1>
-                    <p class="heroes__price">Cena Wynajmu ${hero.price} zł/h</p>
+                    <div class="heroes__textWrapper">
+                        <h1 class="heroes__header">${hero.name}</h1>
+                        <p class="heroes__price">Cena Wynajmu ${hero.price} zł/h</p>
+                    </div>
                 </div>`
             ).join('')}
         </div>
