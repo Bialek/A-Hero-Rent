@@ -119,10 +119,28 @@ const addToCart = (id) => {
 }
 
 const cartRender = () => {
-    let cartValue = 0;
     const cart = document.querySelector('.cart');
     if (cart) {
         cart.remove();
+    }
+    let cartArray = [];
+    if (localStorage.cart !== '') {
+        cartArray = JSON.parse(localStorage.getItem('cart'));
+    }
+    let cartValue =  0;
+    cartArray.map(cartItem => {cartValue += parseInt(cartItem.price)});
+
+    const cartArrayRender = () => {
+        cartArray.map(cartItem => `
+            <div class="cart__item">
+                <img src="${cartItem.image}" alt="${cartItem.name}">
+                <div class="cart__itemContent">
+                    <h3 class="cart__title">${cartItem.name}</h3>
+                    <p class="cart__description">${cartItem.description}</p>
+                    <button class="cart__btn">usuń z koszyka</button>
+                </div>
+            </div> 
+        `);
     }
     document.querySelector('.main').insertAdjacentHTML('afterbegin', `
         <div class="cart">
@@ -132,11 +150,12 @@ const cartRender = () => {
                     do zapłaty: 
                     <span class="cart__value">${cartValue},00 zł</span>
                 </h2>
-                
             </div>
+            ${cartArrayRender}
         </div>    
     `);
 }
+// ${cartArray === '' ? 'Twój koszyk jest pusty.' : cartArrayRender()}
 
 // add hero script
 const renderAddHeroPage = () => {
