@@ -96,6 +96,7 @@ body {
   cursor: pointer;
   position: relative;
   padding-right: 40px;
+  color: #fff;
   text-align: center;
 }
 
@@ -107,6 +108,7 @@ body {
   top: -40%;
   right: 20px;
   background-color: #fff;
+  z-index: 999;
 }
 
 @media screen and (min-width: 760px) {
@@ -141,7 +143,7 @@ body {
   text-decoration: none;
   text-transform: uppercase;
   font-size: 1em;
-  color: #fff;
+  color: inherit;
 }
 
 .nav__logo {
@@ -283,11 +285,11 @@ body {
   background-color: #fff;
   width: 100%;
   height: 15%;
-  z-index: 999;
+  z-index: 99;
   text-align: center;
 }
 
-.heroes__header {
+.heroes__title {
   font-size: 2em;
 }
 
@@ -376,14 +378,14 @@ body {
   }
 }
 
-.hero__header {
+.hero__title {
   text-transform: uppercase;
   font-size: 2.2em;
   position: relative;
   padding-bottom: 30px;
 }
 
-.hero__header:after {
+.hero__title:after {
   content: "";
   position: absolute;
   bottom: 15px;
@@ -496,7 +498,7 @@ body {
   }
 }
 
-.form__header {
+.form__title {
   font-size: 1.8em;
   text-align: center;
   margin: 30px 0;

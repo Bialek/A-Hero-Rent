@@ -12,7 +12,7 @@
     <header class="header header--main">
         <img class="header__background" src="./images/home-slide01.jpg" alt="background">
         <nav class="nav">
-            <a onclick="update_url('/index.html')">
+            <a onclick="update_url('/index')">
                 <img class="nav__logo" src="./images/logo.png" alt="logo">
             </a>
             
@@ -24,7 +24,7 @@
 
             <ul class="nav__list">
                 <li class="nav__item">
-                    <a class="nav__link" onclick="update_url('/add-hero.html')">dodaj herosa</a>
+                    <a class="nav__link" onclick="update_url('/add-hero')">dodaj herosa</a>
                 </li>
                 <li class="nav__item">
                     <a class="nav__link" href="">edytuj herosa</a>
@@ -33,10 +33,10 @@
                     <a class="nav__link" href="">usuń herosa</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" href="">wyczyść bazę</a>
+                    <a class="nav__link" onclick="update_url('/clean-db')">wyczyść bazę</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" onclick="update_url('/load-default-hero.html')">wczytaj herosów</a>
+                    <a class="nav__link" onclick="update_url('/load-default-hero')">wczytaj herosów</a>
                 </li>
             </ul>
         </nav>

@@ -9,8 +9,8 @@ $breakpoint-md: 1024px;
 $column-xs: auto;
 $column-md: auto auto;
 $column-xl: 1fr 1fr 1fr;
-//global styles 
 
+//global styles 
 * {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
@@ -28,9 +28,7 @@ body {
     justify-content: space-between;
 }
 
-
 //styles
-
 .header {
     position: relative;
     &--main {
@@ -76,8 +74,9 @@ body {
     &__item {
         cursor: pointer; 
         position: relative;   
-        padding-right: 40px; 
-        text-align: center;       
+        padding-right: 40px;   
+        color: #fff;   
+        text-align: center;
         &:after {
             content: "";
             position: absolute;
@@ -85,7 +84,8 @@ body {
             width: 1px;
             top: -40%;
             right: 20px;
-            background-color: #fff;                
+            background-color: #fff; 
+            z-index: 999;               
         }
         @media screen and (min-width: $breakpoint-xs) {
             transition: all ease-in-out .3s;
@@ -113,7 +113,7 @@ body {
         text-decoration: none;
         text-transform: uppercase;
         font-size: 1em;
-        color: #fff;
+        color: inherit;
     }
     &__logo {
         height: 50px;
@@ -211,10 +211,10 @@ body {
         background-color: #fff;
         width: 100%;
         height: 15%;
-        z-index: 999;
+        z-index: 99;
         text-align: center;
     }
-    &__header {
+    &__title {
         font-size: 2em;
     }
     &__price {
@@ -266,7 +266,7 @@ body {
             text-align: center;
         }
     }
-    &__header {
+    &__title {
         text-transform: uppercase;
         font-size: 2.2em;
         position: relative;
@@ -357,7 +357,7 @@ body {
     @media screen and (max-width: $breakpoint-xs) {
         width: 90%;
     }
-    &__header {
+    &__title {
         font-size: 1.8em;
         text-align: center;
         margin: 30px 0;
