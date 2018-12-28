@@ -92,7 +92,7 @@ const heroDetails = (id, cartArray = []) => {
                     <h1 class="hero__title">i'm the ${hero.name}!</h1>
                     <p class="hero__description">${hero.description}</p>
                     <span class="hero__price">Cena Wynajmu: ${hero.price} zł/h</span>
-                    ${hero.isAvailable && ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button onclick="addToCart(${id})" class="hero__btn">dodaj do koszyka</button>` : `<span>bohater chwilo nie dostepny</span>`}
+                    ${hero.isAvailable && ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button onclick="addToCart(${id})" class="hero__btn">dodaj do koszyka</button>` : `<span class="hero__status">bohater chwilo nie dostepny</span>`}
                 </div>
                 <span onclick="closeDetails()" class="hero__close"></span>
             </div>
@@ -142,7 +142,7 @@ const cartRender = (cartArray = []) => {
                 <div class="cart__itemContent">
                     <h3 class="cart__title">${cartItem.name}</h3>
                     <p class="cart__description">${cartItem.description}</p>
-                    <button class="cart__btn" onclick={}>
+                    <button class="cart__btn" onclick="removeFromCart(${k})">
                         <span class="cart__btnText">usuń z koszyka</span>
                         <span class="cart__btnIcon"></span>
                     </button>
@@ -167,6 +167,19 @@ const cartRender = (cartArray = []) => {
     `);
 };
 
+const removeFromCart = (id) => {
+    //load data from localStorage
+    const cartArray = JSON.parse(localStorage.getItem('cart'));
+    //return cart item if k is different than id 
+    const newCartArray = cartArray.filter((cartItem, k) => {
+        if (k !== id) {
+            return cartItem;
+        }
+    });
+    localStorage.setItem('cart', JSON.stringify(newCartArray));
+    cartRender();
+}
+
 
 // add hero form script
 const renderAddHeroPage = () => {
@@ -190,7 +203,7 @@ const addHero = (heroesArray = []) => {
     if (localStorage.heroes) {
         heroesArray = JSON.parse(localStorage.getItem('heroes'));
     }    
-    //add new hero if dont find that same hero name in database
+    //add new hero if dont find the same hero name in database
     if ((heroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
         const newHero = {
             name: event.target[0].value,    

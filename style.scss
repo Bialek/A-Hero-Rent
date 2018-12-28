@@ -259,6 +259,14 @@ body {
         @media screen and (max-width: $breakpoint-md) {
             margin: 0 auto;
         }
+        //mobile height bug fix
+        @media screen and (max-height: 755px) {
+            max-height: 100px;
+        }
+        @media screen and (max-height: 450px) {
+            display: none;
+        }
+
     }
     &__content {
         display: flex;
@@ -308,6 +316,9 @@ body {
         &:hover {
             background-color: $primaryColor;
         }
+    }
+    &__status {
+        line-height: 50px;
     }
     &__price, &__btn, &__img  {
         width: 100%;
@@ -374,6 +385,12 @@ body {
                 width: 300%;
                 height: 1px;
                 background-color: $primaryColor;
+                @media screen and (max-width: $breakpoint-md) {
+                    width: 200%;
+                }
+                @media screen and (max-width: $breakpoint-xs) {
+                    width: 100%;
+                }
             }
         }
     }

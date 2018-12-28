@@ -384,6 +384,18 @@ body {
   }
 }
 
+@media screen and (max-height: 755px) {
+  .hero__img {
+    max-height: 100px;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .hero__img {
+    display: none;
+  }
+}
+
 .hero__content {
   display: -webkit-box;
   display: -webkit-flex;
@@ -456,6 +468,10 @@ body {
 
 .hero__btn:hover {
   background-color: #261d52;
+}
+
+.hero__status {
+  line-height: 50px;
 }
 
 .hero__price, .hero__btn, .hero__img {
@@ -550,6 +566,18 @@ body {
   width: 300%;
   height: 1px;
   background-color: #261d52;
+}
+
+@media screen and (max-width: 1024px) {
+  .cart__text:first-child:after {
+    width: 200%;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .cart__text:first-child:after {
+    width: 100%;
+  }
 }
 
 .cart__value {
