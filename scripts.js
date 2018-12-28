@@ -53,8 +53,10 @@ const loadDefaultHeroes = () => {
     localStorage.setItem('heroes', JSON.stringify(defaultHeroes)); 
 };
 
-localStorage.setItem('cart', []); 
-loadDefaultHeroes();
+//first visit script
+if (!localStorage.heroes) {
+    loadDefaultHeroes();
+}
 
 //heroes list and hero detail script 
 const innerHeroes = () => {
@@ -79,7 +81,7 @@ const innerHeroes = () => {
 
 const heroDetails = (id, cartArray = []) => {
     const hero = JSON.parse(localStorage.getItem('heroes'))[id];
-    if (localStorage.cart[0]) {
+    if (localStorage.cart) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
     document.querySelector('body').insertAdjacentHTML('afterbegin', `
@@ -103,14 +105,13 @@ const closeDetails = () => {
 };
 
 // cart script
-const addToCart = (id) => {
+const addToCart = (id, cartArray = []) => {
     const hero = JSON.parse(localStorage.getItem('heroes'))[id];
-    let oldCartArray = [];
-    if (localStorage.cart !== '') {
-        oldCartArray = JSON.parse(localStorage.getItem('cart'));
+    if (localStorage.cart) {
+        cartArray = JSON.parse(localStorage.getItem('cart'));
     }
-    if ((oldCartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) { 
-        const newCartArray = [...oldCartArray, hero];
+    if ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) { 
+        const newCartArray = [...cartArray, hero];
         localStorage.setItem('cart', JSON.stringify(newCartArray)); 
         cartRender(newCartArray);
     }  
@@ -125,7 +126,7 @@ const cartRender = (cartArray = []) => {
         cart.remove();
     }
 
-    if (localStorage.cart[0]) {
+    if (localStorage.cart) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
 
@@ -133,8 +134,8 @@ const cartRender = (cartArray = []) => {
     cartArray.map(cartItem => {cartValue += parseInt(cartItem.price)});
 
     const cartArrayRender = () => {
-        return cartArray.map(cartItem => `
-            <div class="cart__item">
+        return cartArray.map((cartItem, k) => `
+            <div key=${k} class="cart__item">
                 <img class="cart__img" src="${cartItem.image}" alt="${cartItem.name}">
                 <div class="cart__itemContent">
                     <h3 class="cart__title">${cartItem.name}</h3>
@@ -201,8 +202,7 @@ const addHero = (oldHeroesArray = []) => {
 
 // clean heroes database
 const cleanDB = () => {
-    localStorage.setItem('heroes', []);
-    localStorage.setItem('cart', []);
+    localStorage.clear();
     document.querySelector('.heroes').remove();
 };
 
@@ -210,6 +210,10 @@ const cleanDB = () => {
 if (window.location.hash === '') {
     window.location.hash = '#/index';
 };
+    //refresh page bug reapair 
+    if (window.location.hash === '#/index') {
+        innerHeroes();
+    }
 
 const update_url = (url) => {
     window.location.hash = url;
