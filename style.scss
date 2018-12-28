@@ -2,12 +2,13 @@
 
 //varibles 
 $primaryColor: #261d52; 
+$secondaryColor: #a5a5a5;
 
 $breakpoint-xs: 760px;
 $breakpoint-md: 1024px;
 
-$column-xs: auto;
-$column-md: auto auto;
+$column-xs: 1fr;
+$column-md: 1fr 1fr;
 $column-xl: 1fr 1fr 1fr;
 
 //global styles 
@@ -232,6 +233,7 @@ body {
     align-items: center;
     &__wrapper {
         width: 70%;
+        max-height: 100%;
         display: inline-flex;
         margin: 0 auto;
         background-color: #fff;
@@ -283,14 +285,14 @@ body {
     }
     &__description {
         font-size: .8em;
-        color: #cfcfcf;
+        color: $secondaryColor;
     }
     &__price {
         padding: 15px 0;
         margin: 15px 0;
         font-size: 1em;
-        border-bottom: 1px dashed #cfcfcf;
-        border-top: 1px dashed #cfcfcf;
+        border-bottom: 1px dashed $secondaryColor;
+        border-top: 1px dashed $secondaryColor;
         max-width: 275px;
     }
     &__btn {
@@ -341,6 +343,57 @@ body {
                 background-color: #000;
             }
         }
+    }
+}
+
+.cart {
+    width: 100%;
+    padding: 1em;
+    border
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+    &__text {
+
+    }
+    &__value {
+
+    }
+    &__main {
+        display: grid;
+        grid-template-columns: $column-xl;
+        grid-row-gap: 1em;
+        @media screen and (max-width: $breakpoint-md) {
+            grid-template-columns: $column-md;
+        }
+        @media screen and (max-width: $breakpoint-xs) {
+            grid-template-columns: $column-xs;
+        }    
+    }
+    &__item {
+        display: flex;
+    }   
+    &__img {
+        width: 200px;
+        object-fit: cover;
+        object-position: top;
+        height: 200px;
+    }
+    &__itemContent {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    &__title {
+
+    }
+    &__description {
+        overflow: hidden;
+        height: 100px;
+    }
+    &__btn {
+
     }
 }
 

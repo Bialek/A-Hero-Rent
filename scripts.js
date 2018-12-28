@@ -51,7 +51,8 @@ const loadDefaultHeroes = () => {
          } 
     ];
     localStorage.setItem('heroes', JSON.stringify(defaultHeroes)); 
-}
+};
+
 localStorage.setItem('cart', []); 
 loadDefaultHeroes();
 
@@ -74,13 +75,12 @@ const innerHeroes = () => {
         `;
     }
     cartRender();
-}
+};
 
-const heroDetails = (id) => {
+const heroDetails = (id, cartArray = []) => {
     const hero = JSON.parse(localStorage.getItem('heroes'))[id];
-    let cart = [];
-    if (localStorage.cart !== '') {
-        cart = JSON.parse(localStorage.getItem('cart'));
+    if (localStorage.cart[0]) {
+        cartArray = JSON.parse(localStorage.getItem('cart'));
     }
     document.querySelector('body').insertAdjacentHTML('afterbegin', `
         <div class="hero">
@@ -90,17 +90,17 @@ const heroDetails = (id) => {
                     <h1 class="hero__title">i'm the ${hero.name}!</h1>
                     <p class="hero__description">${hero.description}</p>
                     <span class="hero__price">Cena Wynajmu: ${hero.price} zł/h</span>
-                    ${hero.isAvailable && ((cart.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button onclick="addToCart(${id})" class="hero__btn">dodaj do koszyka</button>` : `<span>bohater chwilo nie dostepny</span>`}
+                    ${hero.isAvailable && ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button onclick="addToCart(${id})" class="hero__btn">dodaj do koszyka</button>` : `<span>bohater chwilo nie dostepny</span>`}
                 </div>
                 <span onclick="closeDetails()" class="hero__close"></span>
             </div>
         </div>
     `);
-}
+};
 
 const closeDetails = () => {
     document.querySelector('.hero').remove();
-}
+};
 
 // cart script
 const addToCart = (id) => {
@@ -112,36 +112,39 @@ const addToCart = (id) => {
     if ((oldCartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) { 
         const newCartArray = [...oldCartArray, hero];
         localStorage.setItem('cart', JSON.stringify(newCartArray)); 
+        cartRender(newCartArray);
     }  
     closeDetails();
     heroDetails(id);
-    cartRender();
-}
+};
 
-const cartRender = () => {
+const cartRender = (cartArray = []) => {
+    //remove old html cart
     const cart = document.querySelector('.cart');
     if (cart) {
         cart.remove();
     }
-    let cartArray = [];
-    if (localStorage.cart !== '') {
+
+    if (localStorage.cart[0]) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
+
     let cartValue =  0;
     cartArray.map(cartItem => {cartValue += parseInt(cartItem.price)});
 
     const cartArrayRender = () => {
-        cartArray.map(cartItem => `
+        return cartArray.map(cartItem => `
             <div class="cart__item">
-                <img src="${cartItem.image}" alt="${cartItem.name}">
+                <img class="cart__img" src="${cartItem.image}" alt="${cartItem.name}">
                 <div class="cart__itemContent">
                     <h3 class="cart__title">${cartItem.name}</h3>
                     <p class="cart__description">${cartItem.description}</p>
                     <button class="cart__btn">usuń z koszyka</button>
                 </div>
             </div> 
-        `);
+        `).join('');
     }
+
     document.querySelector('.main').insertAdjacentHTML('afterbegin', `
         <div class="cart">
             <div class="cart__header">
@@ -151,34 +154,35 @@ const cartRender = () => {
                     <span class="cart__value">${cartValue},00 zł</span>
                 </h2>
             </div>
-            ${cartArrayRender}
+            <div class="cart__main">
+                ${!cartArray[0]? 'Twój koszyk jest pusty.' : cartArrayRender()}
+            </div>
         </div>    
     `);
-}
-// ${cartArray === '' ? 'Twój koszyk jest pusty.' : cartArrayRender()}
+};
+
 
 // add hero script
 const renderAddHeroPage = () => {
     document.querySelector('.main').innerHTML = `
         <form class="form" onsubmit="addHero()">
             <h1 class="form__title">Dodaj Herosa</h1>
-            <input name="name" class="form__input" type="text" placeholder="Nazwa Bohatera">
+            <input type="text" name="name" class="form__input" type="text" placeholder="Nazwa Bohatera" required>
             <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
-            <input name="price" class="form__input" type="text" placeholder="Cena wynajmu /h">
+            <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
             <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
             <span class="form__communicate"></span>
             <button class="form__btn" type="submit">Submit</button>
         </form>
     `
-}
+};
 
-const addHero = () => {
+const addHero = (oldHeroesArray = []) => {
     event.preventDefault();
-    let oldHeroesArray = [];
-    if (localStorage.heroes !== '') {
-        oldHeroesArray = JSON.parse(localStorage.getItem('cart'));
+    if (localStorage.heroes[0]) {
+        oldHeroesArray = JSON.parse(localStorage.getItem('heroes'));
     }    
-    const communicate = document.querySelector('.form__communicate')
+    const communicate = document.querySelector('.form__communicate');
     if ((oldHeroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
         const newHero = {
             name: event.target[0].value,    
@@ -192,23 +196,24 @@ const addHero = () => {
         communicate.innerHTML="Bohater dodany do listy";
     } else {
         communicate.innerHTML="Bohater znajduje się już na liście";
-    } 
-}
+    };
+};
 
 // clean heroes database
 const cleanDB = () => {
     localStorage.setItem('heroes', []);
+    localStorage.setItem('cart', []);
     document.querySelector('.heroes').remove();
-}
+};
 
 // page content changing 
 if (window.location.hash === '') {
     window.location.hash = '#/index';
-}
+};
 
 const update_url = (url) => {
     window.location.hash = url;
-}
+};
 
 const hashHandler = () => {
     const header = document.querySelector('.header');
@@ -233,6 +238,6 @@ const hashHandler = () => {
             innerHeroes();
             break;
     }
-}
+};
 
 window.addEventListener('hashchange', hashHandler, false);
