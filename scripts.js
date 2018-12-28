@@ -4,7 +4,7 @@ document.querySelector('.nav__mobile').addEventListener('click', () => {
     nav.classList.contains('nav--active') ? nav.classList.remove('nav--active') : nav.classList.add('nav--active');
 });
 
-// default heroes database and creating default localstorage arrays (heroes, cart) 
+// default heroes database and pushing array to localstorage
 const loadDefaultHeroes = () => {
     const defaultHeroes = [
         {
@@ -59,23 +59,23 @@ if (!localStorage.heroes) {
 }
 
 //heroes list and hero detail script 
-const innerHeroes = () => {
-    if (localStorage.heroes !== '') {
-        const heroes = JSON.parse(localStorage.getItem('heroes'));
-        document.querySelector('.main').innerHTML = `
-            <div class="heroes">
-                ${heroes.map((hero, k) => 
-                    `<div key=${k} class="heroes__item" onclick="heroDetails(${k})">
-                        <img class="heroes__img" src=${hero.image} alt=${hero.name} />
-                        <div class="heroes__textWrapper">
-                            <h1 class="heroes__title">${hero.name}</h1>
-                            <p class="heroes__price">Cena Wynajmu ${hero.price} zł/h</p>
-                        </div>
-                    </div>`
-                ).join('')}
-            </div>
-        `;
-    }
+const innerHeroes = (heroesArray = []) => {
+    if (localStorage.heroes) {
+        heroesArray = JSON.parse(localStorage.getItem('heroes'));
+    };
+    document.querySelector('.main').innerHTML = `
+        <div class="heroes">
+            ${heroesArray.map((hero, k) => 
+                `<div key=${k} class="heroes__item" onclick="heroDetails(${k})">
+                    <img class="heroes__img" src=${hero.image} alt=${hero.name} />
+                    <div class="heroes__textWrapper">
+                        <h1 class="heroes__title">${hero.name}</h1>
+                        <p class="heroes__price">Cena Wynajmu ${hero.price} zł/h</p>
+                    </div>
+                </div>`
+            ).join('')}
+        </div>
+    `;
     cartRender();
 };
 
@@ -107,9 +107,11 @@ const closeDetails = () => {
 // cart script
 const addToCart = (id, cartArray = []) => {
     const hero = JSON.parse(localStorage.getItem('heroes'))[id];
+    //load data from localStorage
     if (localStorage.cart) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
+
     if ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) { 
         const newCartArray = [...cartArray, hero];
         localStorage.setItem('cart', JSON.stringify(newCartArray)); 
@@ -125,14 +127,14 @@ const cartRender = (cartArray = []) => {
     if (cart) {
         cart.remove();
     }
-
+    //load data from localStorage
     if (localStorage.cart) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
-
+    //sum all cart elements
     let cartValue =  0;
     cartArray.map(cartItem => {cartValue += parseInt(cartItem.price)});
-
+    //rendering all cart elements
     const cartArrayRender = () => {
         return cartArray.map((cartItem, k) => `
             <div key=${k} class="cart__item">
@@ -140,12 +142,15 @@ const cartRender = (cartArray = []) => {
                 <div class="cart__itemContent">
                     <h3 class="cart__title">${cartItem.name}</h3>
                     <p class="cart__description">${cartItem.description}</p>
-                    <button class="cart__btn">usuń z koszyka</button>
+                    <button class="cart__btn" onclick={}>
+                        <span class="cart__btnText">usuń z koszyka</span>
+                        <span class="cart__btnIcon"></span>
+                    </button>
                 </div>
             </div> 
         `).join('');
     }
-
+    //rendering cart header and main
     document.querySelector('.main').insertAdjacentHTML('afterbegin', `
         <div class="cart">
             <div class="cart__header">
@@ -163,7 +168,7 @@ const cartRender = (cartArray = []) => {
 };
 
 
-// add hero script
+// add hero form script
 const renderAddHeroPage = () => {
     document.querySelector('.main').innerHTML = `
         <form class="form" onsubmit="addHero()">
@@ -178,13 +183,15 @@ const renderAddHeroPage = () => {
     `
 };
 
-const addHero = (oldHeroesArray = []) => {
-    event.preventDefault();
-    if (localStorage.heroes[0]) {
-        oldHeroesArray = JSON.parse(localStorage.getItem('heroes'));
-    }    
+const addHero = (heroesArray = []) => {
     const communicate = document.querySelector('.form__communicate');
-    if ((oldHeroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
+    event.preventDefault();
+     //load data from localStorage
+    if (localStorage.heroes) {
+        heroesArray = JSON.parse(localStorage.getItem('heroes'));
+    }    
+    //add new hero if dont find that same hero name in database
+    if ((heroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
         const newHero = {
             name: event.target[0].value,    
             image: event.target[1].value,
@@ -192,7 +199,7 @@ const addHero = (oldHeroesArray = []) => {
             description: event.target[3].value,
             isAvailable: true
         };
-        const newHeroesArray = [...oldHeroesArray, newHero];
+        const newHeroesArray = [...heroesArray, newHero];
         localStorage.setItem('heroes', JSON.stringify(newHeroesArray));
         communicate.innerHTML="Bohater dodany do listy";
     } else {
@@ -203,7 +210,7 @@ const addHero = (oldHeroesArray = []) => {
 // clean heroes database
 const cleanDB = () => {
     localStorage.clear();
-    document.querySelector('.heroes').remove();
+    innerHeroes();
 };
 
 // page content changing 
@@ -234,6 +241,7 @@ const hashHandler = () => {
 
         case '#/load-default-hero':
             loadDefaultHeroes();
+            innerHeroes();
             break;
 
         default:
