@@ -411,6 +411,39 @@ body {
     }
     &__item {
         display: flex;
+        margin-right: 20px;
+        position: relative;
+        &:after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            content: "";
+            height: 100%;
+            width: 1px;
+            background-color: $secondaryColor;
+        }
+        @media screen and (min-width: $breakpoint-md) {
+            &:nth-child(3n) {
+                margin-right: 0;
+                &:after {
+                    display: none;
+                }
+            }
+        }
+        @media screen and (max-width: $breakpoint-md) {
+            &:nth-child(2n) {
+                margin-right: 0;
+                &:after {
+                    display: none;
+                }
+            }
+        }
+        @media screen and (max-width: $breakpoint-xs) {
+                margin-right: 0;
+                &:after {
+                    display: none;
+            }
+        }
     }   
     &__img {
         width: 40%;
@@ -419,7 +452,7 @@ body {
         height: 300px;
     }
     &__itemContent {
-        padding: 0 1.3em;
+        padding: 0 20px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
