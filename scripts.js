@@ -1,7 +1,7 @@
 // mobile menu script
 document.querySelector('.nav__mobile').addEventListener('click', () => {
     const nav = document.querySelector('.nav');
-    nav.classList.contains('nav--active') ? nav.classList.remove('nav--active') : nav.classList.add('nav--active');
+    nav.classList.toggle('nav--active');
 });
 
 // default heroes database and pushing array to localstorage
@@ -235,9 +235,8 @@ if (window.location.hash === '') {
         innerHeroes();
     }
 
-const update_url = (url) => {
-    window.location.hash = url;
-};
+
+
 
 const hashHandler = () => {
     const header = document.querySelector('.header');
@@ -266,3 +265,12 @@ const hashHandler = () => {
 };
 
 window.addEventListener('hashchange', hashHandler, false);
+
+//add event listeners to link nav 
+document.querySelectorAll('a[href').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.hash = `/${link.getAttribute('href')}`;
+        hashHandler()
+    });
+});
