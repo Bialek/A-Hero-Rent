@@ -663,6 +663,7 @@ body {
 }
 
 .cart__itemContent {
+  width: 100%;
   padding: 0 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -812,6 +813,10 @@ body {
 
 .form__btn:hover {
   background-color: #261d52;
+}
+
+.form__error {
+  color: red;
 }
 
 .footer {
