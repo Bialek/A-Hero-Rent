@@ -1,58 +1,9 @@
 // mobile menu script
-document.querySelector('.nav__mobile').addEventListener('click', () => {
+const openCloseMenu = () => {
     const nav = document.querySelector('.nav');
     nav.classList.toggle('nav--active');
-});
-
-// default heroes database
-const loadDefaultDb = () => {
-    const defaultHeroes = [
-        {
-            name: 'Superman',
-            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-            image: './images/superman.jpg',
-            price: '3500',
-            isAvailable: true
-         },
-         {
-            name: 'Hulk',
-            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-            image: './images/hulk.jpg',
-            price: '25000',
-            isAvailable: false
-         },
-         {
-            name: 'Thor',
-            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-            image: './images/thor.jpg',
-            price: '55000',
-            isAvailable: true
-         },
-         {
-            name: 'Ironman',
-            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-            image: './images/ironman.jpg',
-            price: '75000',
-            isAvailable: true
-         },
-         {
-            name: 'Potter',
-            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-            image: './images/potter.jpg',
-            price: '125000',
-            isAvailable: true
-         },
-         {
-            name: 'Batman',
-            description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
-            image: './images/batman.jpg',
-            price: '2000',
-            isAvailable: false
-         } 
-    ];
-};
-
-
+} 
+document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu, false); 
 //heroes list and hero detail script 
 let lastHeroeslistfetched = [];
 
@@ -142,7 +93,7 @@ const addToCart = (hero = lastHeroFetched, cartArray = []) => {
         cartRender(newCartArray);
     }  
     closeDetails();
-    heroDetails(hero);
+    renderHeroDetails(hero);
 };
 
 const cartRender = (cartArray = []) => {
@@ -211,8 +162,7 @@ const removeFromCart = (id) => {
     cartRender();
 }
 
-
-// add hero form script
+// add hero page script
 const renderAddHeroPage = () => {
     document.querySelector('.main').innerHTML = `
         <form class="form" onsubmit="addHero()">
@@ -227,91 +177,153 @@ const renderAddHeroPage = () => {
     `
 };
 
-const addHero = (heroesArray = lastHeroeslistfetched) => {
-    console.log(heroesArray);
-    
+fetchNewHero = (name, image, price, description, isAvailable = true) => {
+    fetch('/heroes', {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        method: 'POST',
+        body: JSON.stringify({
+            name: name,    
+            image: image,
+            price: price,
+            description: description,
+            isAvailable: isAvailable
+        })
+    })
+}
+
+const addHero = (heroeslist = lastHeroeslistfetched) => {
     const communicate = document.querySelector('.form__communicate');
     event.preventDefault();
-
-    if ((heroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
-        fetch('/heroes', {
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            method: 'POST',
-            body: JSON.stringify({
-                name: event.target[0].value,    
-                image: event.target[1].value,
-                price: event.target[2].value,
-                description: event.target[3].value,
-                isAvailable: true
-            })
-        })
-        communicate.classList.remove('form__error')
-        communicate.innerHTML="Bohater dodany do listy"
+    
+    if ((heroeslist.findIndex(hero => hero.name === event.target[0].value)) === -1) { 
+        fetchNewHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value)
+        communicate.textContent="bohater został dodany";
+        communicate.classList.remove('form__error');
     } else {
-        communicate.innerHTML="Bohater znajduje się już na liście";
-        communicate.classList.add('form__error')
+        communicate.textContent = "bohater jest już na liście";
+        communicate.classList.add('form__error');
     }
+};
+//display comunicat script
 
-    //  //load data from localStorage
-    // if (localStorage.heroes) {
-    //     heroesArray = JSON.parse(localStorage.getItem('heroes'));
-    // }    
-    // //add new hero if dont find the same hero name in database
-    // if ((heroesArray.findIndex(hero => hero.name === event.target[0].value)) === -1) {
-    //     const newHero = {
-    //         name: event.target[0].value,    
-    //         image: event.target[1].value,
-    //         price: event.target[2].value,
-    //         description: event.target[3].value,
-    //         isAvailable: true
-    //     };
-    //     const newHeroesArray = [...heroesArray, newHero];
-    //     localStorage.setItem('heroes', JSON.stringify(newHeroesArray));
-    //     communicate.innerHTML="Bohater dodany do listy";
-    // } else {
-    //     communicate.innerHTML="Bohater znajduje się już na liście";
-    // };
+// const displayCommunicate = 
+
+
+//edit hero page script
+
+const renderEditHeroPage = () => {
+    document.querySelector('.main').innerHTML = `
+        <form id="editForm" class="form" onsubmit="editHero()">
+            <h1 class="form__title">Edytuj Herosa</h1>
+            <select name="select" class="form__input" form="editForm">
+                ${lastHeroeslistfetched.map(hero => (`
+                    <option value="${hero.name}">${hero.name}</option>
+                `))}
+            </select>
+            <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
+            <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
+            <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
+            <span class="form__communicate"></span>
+            <button class="form__btn" type="submit">Edytuj</button>
+        </form>
+    `
 };
 
+const editHero = () => {
+    event.preventDefault();
+    console.log(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value);
+    
+}
 // clean heroes database
 const cleanDB = () => {
-    localStorage.clear();
-    fetchHeroes();
+    fetch('/heroes', { 
+        method: 'DELETE' 
+    })
 };
-
-// page content changing 
-if (window.location.hash === '') {
-    window.location.hash = '#/index';
+// default heroes database
+const defaultHeroes = [
+    {
+        name: 'Superman',
+        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+        image: './images/superman.jpg',
+        price: '3500',
+        isAvailable: true
+     },
+     {
+        name: 'Hulk',
+        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+        image: './images/hulk.jpg',
+        price: '25000',
+        isAvailable: false
+     },
+     {
+        name: 'Thor',
+        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+        image: './images/thor.jpg',
+        price: '55000',
+        isAvailable: true
+     },
+     {
+        name: 'Ironman',
+        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+        image: './images/ironman.jpg',
+        price: '75000',
+        isAvailable: true
+     },
+     {
+        name: 'Potter',
+        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+        image: './images/potter.jpg',
+        price: '125000',
+        isAvailable: true
+     },
+     {
+        name: 'Batman',
+        description: 'Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.',
+        image: './images/batman.jpg',
+        price: '2000',
+        isAvailable: false
+     } 
+];
+//load default heroes db 
+const loadDefaultDb = () => {
+    defaultHeroes.forEach(hero => {
+        fetchNewHero(hero.name, hero.image, hero.price, hero.description, hero.isAvailable);
+    })
 };
-    //refresh page bug reapair 
-    if (window.location.hash === '#/index') {
-        fetchHeroes();
-    }
-
-
-
-
+//menu link and changing page script
 const hashHandler = () => {
     const header = document.querySelector('.header');
     switch (window.location.hash) {
         case '#/add-hero':
-           if (header.classList.contains('header--main')) header.classList.remove('header--main');    
+           header.classList.remove('header--main');   
            renderAddHeroPage();     
+            break;
+        case '#/edit-hero':
+           header.classList.remove('header--main');   
+           renderEditHeroPage();     
+            break;
+        case '#/delete-hero':
+            header.classList.remove('header--main');   
+            renderAddHeroPage();     
             break;
 
         case '#/clean-db':
             cleanDB();
+            localStorage.clear();
             fetchHeroes();
+            header.classList.add('header--main');
             break;
 
         case '#/load-default-hero':
-            loadDefaultHeroes();
+            loadDefaultDb();
             fetchHeroes();
+            header.classList.add('header--main');
             break;
 
         default:
         case '#/index':
-            if (!(header.classList.contains('header--main'))) header.classList.add('header--main');
+            header.classList.add('header--main');
             fetchHeroes();
             break;
     }
@@ -319,11 +331,15 @@ const hashHandler = () => {
 
 window.addEventListener('hashchange', hashHandler, false);
 
-//add event listeners to link nav 
+//after page refresh always back or rerender index
+window.location.hash = '#/index';
+fetchHeroes();
+
+//add event listeners to a href
 document.querySelectorAll('a[href').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.hash = `/${link.getAttribute('href')}`;
-        hashHandler()
+        openCloseMenu();
     });
 });

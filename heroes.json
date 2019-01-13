@@ -1,31 +1,66 @@
 {
   "heroes": [
     {
-      "name": "qwe",
-      "image": "https://vignette.wikia.nocookie.net/half-life/images/f/f3/Superportal.jpg/revision/latest?cb=20100507134310&path-prefix=en",
+      "name": "asd",
+      "image": "https://www.edgeofexistence.org/wp-content/uploads/2015/09/justice-league-superhero-wallpaper-hd.jpg",
       "price": "123",
       "description": "asd",
       "isAvailable": true
     },
     {
+      "name": "Superman",
+      "image": "./images/superman.jpg",
+      "price": "3500",
+      "description": "Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.",
+      "isAvailable": true
+    },
+    {
+      "name": "Hulk",
+      "image": "./images/hulk.jpg",
+      "price": "25000",
+      "description": "Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.",
+      "isAvailable": false
+    },
+    {
+      "name": "Thor",
+      "image": "./images/thor.jpg",
+      "price": "55000",
+      "description": "Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.",
+      "isAvailable": true
+    },
+    {
+      "name": "Ironman",
+      "image": "./images/ironman.jpg",
+      "price": "75000",
+      "description": "Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.",
+      "isAvailable": true
+    },
+    {
+      "name": "Potter",
+      "image": "./images/potter.jpg",
+      "price": "125000",
+      "description": "Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.",
+      "isAvailable": true
+    },
+    {
+      "name": "Batman",
+      "image": "./images/batman.jpg",
+      "price": "2000",
+      "description": "Et veniam anim qui proident cupidatat excepteur incididunt sint deserunt non.Officia commodo in nulla exercitation cupidatat nisi mollit.Velit excepteur cillum aute aliquip laborum veniam sunt dolore aliquip est magna aute tempor.Deserunt veniam adipisicing proident ipsum.",
+      "isAvailable": false
+    },
+    {
       "name": "kiosk",
       "image": "https://www.nbc.com/sites/nbcunbc/files/files/images/2018/7/31/Heroes-KeyArt-Logo-Show-Tile-1920x1080.jpg",
-      "price": "1233",
-      "description": "qweqweqw",
+      "price": "123",
+      "description": "aszdasdas",
       "isAvailable": true
     },
     {
-      "name": "kios",
-      "image": "communicate.innerHTML=\"Bohater znajduje się już na liście\";",
-      "price": "132",
-      "description": "12",
-      "isAvailable": true
-    },
-    {
-      "name": "asd",
+      "name": "wonder woman",
       "image": "https://www.nbc.com/sites/nbcunbc/files/files/images/2018/7/31/Heroes-KeyArt-Logo-Show-Tile-1920x1080.jpg",
       "price": "200",
-      "description": "asd",
+      "description": "wonder woman",
       "isAvailable": true
     }
   ]
