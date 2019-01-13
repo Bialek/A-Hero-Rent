@@ -1,3 +1,6 @@
+let lastHeroFetched = [];
+let lastHeroeslistfetched = [];
+
 // mobile menu script
 const openCloseMenu = () => {
     const nav = document.querySelector('.nav');
@@ -5,7 +8,6 @@ const openCloseMenu = () => {
 } 
 document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu, false); 
 //heroes list and hero detail script 
-let lastHeroeslistfetched = [];
 
 const fetchHeroes = () => {
     fetch('/heroes')
@@ -38,8 +40,6 @@ const renderHeroes = (heroesArray = []) => {
         </div>
     `;
 }
-
-let lastHeroFetched;
 
 const fetchHero = (name) => {
     fetch('/heroes/' + name)
@@ -177,7 +177,7 @@ const renderAddHeroPage = () => {
     `
 };
 
-fetchNewHero = (name, image, price, description, isAvailable = true) => {
+const fetchNewHero = (name, image, price, description, isAvailable = true) => {
     fetch('/heroes', {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         method: 'POST',
@@ -229,11 +229,23 @@ const renderEditHeroPage = () => {
     `
 };
 
+const fetchEditHero = (name, image, price, description,) =>
+    fetch('/heroes/' + name, {
+        headers: {"Content-type": "application/json; charset=utf-8" },
+        method: 'PUT',
+        body: JSON.stringify({
+            name: name,
+            image: image,
+            price: price,
+            description: description,
+        })
+    })
+
 const editHero = () => {
     event.preventDefault();
-    console.log(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value);
-    
+    fetchEditHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value);  
 }
+//dont edit cart
 // clean heroes database
 const cleanDB = () => {
     fetch('/heroes', { 
