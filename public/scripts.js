@@ -1,5 +1,6 @@
 let lastHeroFetched = [];
 let lastHeroeslistfetched = [];
+const URL = '/heroes/';
 
 // mobile menu script
 const openCloseMenu = () => {
@@ -42,7 +43,7 @@ const renderHeroes = (heroesArray = []) => {
 }
 
 const fetchHero = (name) => {
-    fetch('/heroes/' + name)
+    fetch(URL + name)
         .then(res => res.json())
         .then(data => {
             renderHeroDetails(data)
@@ -98,17 +99,17 @@ const addToCart = (hero = lastHeroFetched, cartArray = []) => {
 
 const cartRender = (cartArray = []) => {
     //remove old html cart
-    const cart = document.querySelector('.cart');
-    if (cart) {
-        cart.remove();
-    }
+    // const cart = document.querySelector('.cart');
+    // if (cart) {
+    //     cart.remove();
+    // }
     //load data from localStorage
     if (localStorage.cart) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
     //sum all cart elements
     let cartValue =  0;
-    cartArray.map(cartItem => {cartValue += parseInt(cartItem.price)});
+    cartArray.forEach(cartItem => {cartValue += parseInt(cartItem.price)});
     
     //rendering all cart elements
     const cartArrayRender = () => {
@@ -152,9 +153,9 @@ const cartRender = (cartArray = []) => {
 const removeFromCart = (id) => {
     //load data from localStorage
     const cartArray = JSON.parse(localStorage.getItem('cart'));
-    //return cart item if k is different than id 
-    const newCartArray = cartArray.filter((cartItem, k) => {
-        if (k !== id) {
+    //return cart item if key is different than id 
+    const newCartArray = cartArray.filter((cartItem, key) => {
+        if (key !== id) {
             return cartItem;
         }
     });
@@ -164,7 +165,7 @@ const removeFromCart = (id) => {
 
 // add hero page script
 const renderAddHeroPage = () => {
-    document.querySelector('.main').innerHTML = `
+    document.querySelector('.main').createElement(`
         <form class="form" onsubmit="addHero()">
             <h1 class="form__title">Dodaj Herosa</h1>
             <input type="text" name="name" class="form__input" type="text" placeholder="Nazwa Bohatera" required>
@@ -174,7 +175,7 @@ const renderAddHeroPage = () => {
             <span class="form__communicate"></span>
             <button class="form__btn" type="submit">Submit</button>
         </form>
-    `
+    `);
 };
 
 const fetchNewHero = (name, image, price, description, isAvailable = true) => {
@@ -192,9 +193,8 @@ const fetchNewHero = (name, image, price, description, isAvailable = true) => {
 }
 
 const addHero = (heroeslist = lastHeroeslistfetched) => {
-    const communicate = document.querySelector('.form__communicate');
     event.preventDefault();
-    
+    const communicate = document.querySelector('.form__communicate');
     if ((heroeslist.findIndex(hero => hero.name === event.target[0].value)) === -1) { 
         fetchNewHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value)
         communicate.textContent="bohater został dodany";
@@ -204,10 +204,6 @@ const addHero = (heroeslist = lastHeroeslistfetched) => {
         communicate.classList.add('form__error');
     }
 };
-//display comunicat script
-
-// const displayCommunicate = 
-
 
 //edit hero page script
 
@@ -230,7 +226,7 @@ const renderEditHeroPage = () => {
 };
 
 const fetchEditHero = (name, image, price, description,) =>
-    fetch('/heroes/' + name, {
+    fetch(URL + name, {
         headers: {"Content-type": "application/json; charset=utf-8" },
         method: 'PUT',
         body: JSON.stringify({
@@ -246,11 +242,36 @@ const editHero = () => {
     fetchEditHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value);  
 }
 //dont edit cart
+//delete page script 
+const renderDeleteHeroPage = () => {
+    document.querySelector('.main').innerHTML = `
+        <form id="editForm" class="form" onsubmit="handlerDeleteHeroSumit()">
+            <h1 class="form__title">Usuń Heroesa</h1>
+            <select name="select" class="form__input" form="editForm">
+                ${lastHeroeslistfetched.map(hero => (`
+                    <option value="${hero.name}">${hero.name}</option>
+                `))}
+            </select>
+            <button class="form__btn" type="submit">Usuń</button>
+        </form>
+    `
+};
+
+const handlerDeleteHeroSumit = () => {
+    event.preventDefault();
+    fetchDeleteHero(event.target[0].value);
+    renderDeleteHeroPage();
+}
+
+const fetchDeleteHero = (name = '') => {
+    fetch(URL + name, {
+        method: 'DELETE',
+    })
+}
+
 // clean heroes database
 const cleanDB = () => {
-    fetch('/heroes', { 
-        method: 'DELETE' 
-    })
+    fetchDeleteHero()
 };
 // default heroes database
 const defaultHeroes = [
@@ -317,7 +338,7 @@ const hashHandler = () => {
             break;
         case '#/delete-hero':
             header.classList.remove('header--main');   
-            renderAddHeroPage();     
+            renderDeleteHeroPage();     
             break;
 
         case '#/clean-db':

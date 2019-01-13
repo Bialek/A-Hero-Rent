@@ -1,13 +1,14 @@
 {
   "name": "intive-patronage",
   "version": "1.0.0",
-  "description": "",
+  "description": "Need a Hero-Pure JS / CSS Application to exercise knowledge about JavaScript",
   "main": "index.js",
+  "repository": "https://github.com/Bialek/Hero-Rent",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ."
   },
-  "author": "",
+  "author": "Białek Rafał front-end, intive back-end",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
