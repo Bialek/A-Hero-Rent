@@ -1,6 +1,6 @@
 let lastHeroFetched = [];
-let lastHeroeslistfetched = [];
 const URL = '/heroes/';
+const loader = document.querySelector('.loader');
 
 // mobile menu script
 const openCloseMenu = () => {
@@ -11,27 +11,23 @@ document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu, 
 //heroes list and hero detail script 
 
 const fetchHeroes = () => {
-    fetch('/heroes')
+    loader.classList.remove('hidden');
+    return fetch('/heroes')
         .then(res => res.json())
-        .then(data => {
-            renderHeroes(data)
-            lastHeroeslistfetched = data;
-        })
-        .then(() => cartRender())
+        .then(data => { return data })
+        .then(loader.classList.add('hidden'))
 };
 
-const renderHeroes = (heroesArray = []) => {
-    document.querySelector('.main').innerHTML = `
+const addHeroesList = () => {
+    fetchHeroes()
+        .then(res => renderHeroesList(res))
+}
+const renderHeroesList = (heroesArray = []) => {
+    document.querySelector('#homePage').insertAdjacentHTML('beforeend',  `
         <div class="heroes">
-            ${heroesArray.map((hero, k) => 
-                `<div key=${k} class="heroes__item" onclick="fetchHero('${hero.name}')">
-                    <img class="heroes__img" src="${hero.image}"
-                        srcset="${hero.image} 1024w,
-                                ${hero.image} 640w,
-                                ${hero.image} 320w"
-                        sizes="(min-width: 36em) 33.3vw, 100vw"
-                        alt="${hero.name}"
-                    />
+            ${heroesArray.map((hero, key) => 
+                `<div key=${key} class="heroes__item" onclick="fetchHero('${hero.name}')">
+                    <img class="heroes__img" src="${hero.image}" alt="${hero.name}" />
                     <div class="heroes__textWrapper">
                         <h1 class="heroes__title">${hero.name}</h1>
                         <p class="heroes__price">Cena Wynajmu ${hero.price} zł/h</p>
@@ -39,7 +35,7 @@ const renderHeroes = (heroesArray = []) => {
                 </div>`
             ).join('')}
         </div>
-    `;
+    `)
 }
 
 const fetchHero = (name) => {
@@ -58,20 +54,14 @@ const renderHeroDetails = (hero, cartArray = []) => {
     document.querySelector('body').insertAdjacentHTML('afterbegin', `
         <div class="hero">
             <div class="hero__wrapper">
-                <img class="hero__img" src="${hero.image}"
-                    srcset="${hero.image} 1024w,
-                            ${hero.image} 640w,
-                            ${hero.image} 320w"
-                    sizes="(min-width: 36em) 33.3vw, 100vw"
-                    alt="${hero.name}"
-                />
+                <img class="hero__img" src="${hero.image}" alt="${hero.name}" />
                 <div class="hero__content">
                     <h1 class="hero__title">i'm the ${hero.name}!</h1>
                     <p class="hero__description">${hero.description}</p>
                     <span class="hero__price">Cena Wynajmu: ${hero.price} zł/h</span>
                     ${hero.isAvailable && ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button onclick="addToCart()" class="hero__btn">dodaj do koszyka</button>` : `<span class="hero__status">bohater chwilo nie dostepny</span>`}
                 </div>
-                <span onclick="closeDetails()" class="hero__close"></span>
+                <button onclick="closeDetails()" class="hero__close"></span>
             </div>
         </div>
     `);
@@ -98,34 +88,30 @@ const addToCart = (hero = lastHeroFetched, cartArray = []) => {
 };
 
 const cartRender = (cartArray = []) => {
-    //remove old html cart
-    // const cart = document.querySelector('.cart');
-    // if (cart) {
-    //     cart.remove();
-    // }
-    //load data from localStorage
+    // remove old html cart
+    const cart = document.querySelector('.cart__main');
+    if (cart) {
+        cart.remove();
+    }
+    // load data from localStorage
     if (localStorage.cart) {
         cartArray = JSON.parse(localStorage.getItem('cart'));
     }
-    //sum all cart elements
+    //sum all cart elements and render
+    const cartValueRender = document.querySelector('.cart__value');
     let cartValue =  0;
     cartArray.forEach(cartItem => {cartValue += parseInt(cartItem.price)});
+    cartValueRender.textContent = cartValue + ',00 zł';
     
     //rendering all cart elements
     const cartArrayRender = () => {
-        return cartArray.map((cartItem, k) => `
-            <div key=${k} class="cart__item">
-                <img class="cart__img" src="${cartItem.image}"
-                    srcset="${cartItem.image} 1024w,
-                            ${cartItem.image} 640w,
-                            ${cartItem.image} 320w"
-                    sizes="(min-width: 36em) 33.3vw, 100vw"
-                    alt="${cartItem.name}"
-                />
+        return cartArray.map((cartItem, key) => `
+            <div key=${key} class="cart__item">
+                <img class="cart__img" src="${cartItem.image}" alt="${cartItem.name}" />
                 <div class="cart__itemContent">
                     <h3 class="cart__title">${cartItem.name}</h3>
                     <p class="cart__description">${cartItem.description}</p>
-                    <button class="cart__btn" onclick="removeFromCart(${k})">
+                    <button class="cart__btn" onclick="removeFromCart(${key})">
                         <span class="cart__btnText">usuń z koszyka</span>
                         <span class="cart__btnIcon"></span>
                     </button>
@@ -133,20 +119,11 @@ const cartRender = (cartArray = []) => {
             </div> 
         `).join('');
     }
-    //rendering cart header and main
-    document.querySelector('.main').insertAdjacentHTML('afterbegin', `
-        <div class="cart">
-            <div class="cart__header">
-                <h2 class="cart__text">koszyk</h2>
-                <h2 class="cart__text">
-                    do zapłaty: 
-                    <span class="cart__value">${cartValue},00 zł</span>
-                </h2>
-            </div>
-            <div class="cart__main">
-                ${!cartArray[0]? 'Twój koszyk jest pusty.' : cartArrayRender()}
-            </div>
-        </div>    
+    //rendering cart  and main
+    document.querySelector('.cart').insertAdjacentHTML('beforeend', `     
+        <div class="cart__main">
+            ${!cartArray[0]? 'Twój koszyk jest pusty.' : cartArrayRender()}
+        </div>  
     `);
 };
 
@@ -163,20 +140,27 @@ const removeFromCart = (id) => {
     cartRender();
 }
 
+// on submit form handler 
+
+handlerOnSubmitForm = () => {
+    event.preventDefault();
+    switch (event.target.id) {
+        case 'addHeroForm':
+            fetchNewHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value)     
+            break;
+        case 'editHeroForm':
+            fetchEditHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value);  
+            break;
+        case 'deleteHeroForm':
+            fetchDeleteHero(event.target[0].value);
+            break;
+        default:
+            break;
+    }
+}
+
+document.querySelectorAll('.form').forEach(form => form.addEventListener('submit', handlerOnSubmitForm));
 // add hero page script
-const renderAddHeroPage = () => {
-    document.querySelector('.main').createElement(`
-        <form class="form" onsubmit="addHero()">
-            <h1 class="form__title">Dodaj Herosa</h1>
-            <input type="text" name="name" class="form__input" type="text" placeholder="Nazwa Bohatera" required>
-            <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
-            <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
-            <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
-            <span class="form__communicate"></span>
-            <button class="form__btn" type="submit">Submit</button>
-        </form>
-    `);
-};
 
 const fetchNewHero = (name, image, price, description, isAvailable = true) => {
     fetch('/heroes', {
@@ -192,40 +176,7 @@ const fetchNewHero = (name, image, price, description, isAvailable = true) => {
     })
 }
 
-const addHero = (heroeslist = lastHeroeslistfetched) => {
-    event.preventDefault();
-    const communicate = document.querySelector('.form__communicate');
-    if ((heroeslist.findIndex(hero => hero.name === event.target[0].value)) === -1) { 
-        fetchNewHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value)
-        communicate.textContent="bohater został dodany";
-        communicate.classList.remove('form__error');
-    } else {
-        communicate.textContent = "bohater jest już na liście";
-        communicate.classList.add('form__error');
-    }
-};
-
-//edit hero page script
-
-const renderEditHeroPage = () => {
-    document.querySelector('.main').innerHTML = `
-        <form id="editForm" class="form" onsubmit="editHero()">
-            <h1 class="form__title">Edytuj Herosa</h1>
-            <select name="select" class="form__input" form="editForm">
-                ${lastHeroeslistfetched.map(hero => (`
-                    <option value="${hero.name}">${hero.name}</option>
-                `))}
-            </select>
-            <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
-            <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
-            <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
-            <span class="form__communicate"></span>
-            <button class="form__btn" type="submit">Edytuj</button>
-        </form>
-    `
-};
-
-const fetchEditHero = (name, image, price, description,) =>
+const fetchEditHero = (name, image, price, description,) => {
     fetch(URL + name, {
         headers: {"Content-type": "application/json; charset=utf-8" },
         method: 'PUT',
@@ -236,36 +187,29 @@ const fetchEditHero = (name, image, price, description,) =>
             description: description,
         })
     })
-
-const editHero = () => {
-    event.preventDefault();
-    fetchEditHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value);  
-}
-//dont edit cart
-//delete page script 
-const renderDeleteHeroPage = () => {
-    document.querySelector('.main').innerHTML = `
-        <form id="editForm" class="form" onsubmit="handlerDeleteHeroSumit()">
-            <h1 class="form__title">Usuń Heroesa</h1>
-            <select name="select" class="form__input" form="editForm">
-                ${lastHeroeslistfetched.map(hero => (`
-                    <option value="${hero.name}">${hero.name}</option>
-                `))}
-            </select>
-            <button class="form__btn" type="submit">Usuń</button>
-        </form>
-    `
-};
-
-const handlerDeleteHeroSumit = () => {
-    event.preventDefault();
-    fetchDeleteHero(event.target[0].value);
-    renderDeleteHeroPage();
 }
 
 const fetchDeleteHero = (name = '') => {
     fetch(URL + name, {
         method: 'DELETE',
+    })
+}
+
+//dynamic adding select hero list to edit and delete form 
+const addSelectListToForm = () => {
+    fetchHeroes()
+    .then(res => renderSelectListToForm(res));
+}
+
+const renderSelectListToForm = (heroesList) => {
+    document.querySelectorAll('#editHeroForm h1, #deleteHeroForm h1').forEach(form => {
+        form.insertAdjacentHTML("afterend", `
+            <select name="select" class="form__input">
+                ${heroesList.map(hero => (`
+                    <option value="${hero.name}">${hero.name}</option>
+                `)).join('')}
+            </select>
+        `)
     })
 }
 
@@ -324,6 +268,7 @@ const loadDefaultDb = () => {
         fetchNewHero(hero.name, hero.image, hero.price, hero.description, hero.isAvailable);
     })
 };
+
 //menu link and changing page script
 const hashHandler = () => {
     const header = document.querySelector('.header');
@@ -331,42 +276,43 @@ const hashHandler = () => {
         case '#/add-hero':
            header.classList.remove('header--main');   
            renderAddHeroPage();     
-            break;
+        break;
         case '#/edit-hero':
            header.classList.remove('header--main');   
+           addSelectListToForm();
            renderEditHeroPage();     
-            break;
+        break;
         case '#/delete-hero':
             header.classList.remove('header--main');   
-            renderDeleteHeroPage();     
-            break;
-
+            addSelectListToForm();   
+        break;
         case '#/clean-db':
             cleanDB();
             localStorage.clear();
             fetchHeroes();
             header.classList.add('header--main');
-            break;
-
+        break;
         case '#/load-default-hero':
             loadDefaultDb();
             fetchHeroes();
             header.classList.add('header--main');
-            break;
-
+        break;
         default:
         case '#/index':
             header.classList.add('header--main');
-            fetchHeroes();
-            break;
+            addHeroesList();
+        break;
     }
 };
+const init = () => {
+    window.addEventListener('hashchange', hashHandler, false);
+    
+    //after page refresh always back or rerender index
+    window.location.hash = '#/index';
+    fetchHeroes();
+}
 
-window.addEventListener('hashchange', hashHandler, false);
-
-//after page refresh always back or rerender index
-window.location.hash = '#/index';
-fetchHeroes();
+init();
 
 //add event listeners to a href
 document.querySelectorAll('a[href').forEach(link => {

@@ -42,8 +42,56 @@
         </nav>
     </header>
 
-    <main class="main container">
+    <main class="main">
+        <div class="loader">
+            <span class="loader__spinner"></span>
+        </div>
 
+        <section class="container" id="homePage">
+            <div class="cart">
+                <div class="cart__header">
+                    <h2 class="cart__text">koszyk</h2>
+                    <h2 class="cart__text">
+                        do zapłaty: 
+                        <span class="cart__value">0,00 zł</span>
+                    </h2>
+                </div>
+            </div>    
+        </section>
+
+        <section class="container" id="addHeroPage">
+            <form id="addHeroForm" class="form">
+                <h1 class="form__title">Dodaj Herosa</h1>
+                <input type="text" name="name" class="form__input" type="text" placeholder="Nazwa Bohatera" required>
+                <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
+                <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
+                <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
+                <button class="form__btn" type="submit">Dodaj</button>
+            </form>
+        </section>
+
+        <section class="container" id="editHeroPage">
+            <form id="editHeroForm" class="form">
+                <h1 class="form__title">Edytuj Herosa</h1>
+                <select name="select" class="form__input" form="editForm">
+                    <!-- ${lastHeroeslistfetched.map(hero => (`
+                        <option value="${hero.name}">${hero.name}</option>
+                    `))} -->
+                </select>
+                <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
+                <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
+                <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
+                <button class="form__btn" type="submit">Edytuj</button>
+            </form>
+        </section>
+
+        <section class="container" id="deleteHeroPage">
+            <form id="deleteHeroForm" class="form">
+                <h1 class="form__title">Usuń Heroesa</h1>
+    
+                <button class="form__btn" type="submit">Usuń</button>
+            </form>
+        </section>
     </main>
 
     <footer class="footer">
