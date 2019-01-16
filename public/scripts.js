@@ -13,8 +13,12 @@ const openCloseMenu = () => {
     nav.classList.toggle('nav--active');
 } 
 document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu, false); 
-//heroes list and hero detail script 
 
+//remove old html element 
+const removeOldHtmlElement = (selector) => {
+    document.querySelectorAll(`${selector}`).forEach(list => list.remove()); 
+}
+//heroes list and hero detail script 
 const fetchHeroes = () => {
     loader.classList.remove('hidden');
     return fetch('/heroes')
@@ -22,12 +26,13 @@ const fetchHeroes = () => {
         .then(data => { return data })
         .then(loader.classList.add('hidden'))
 };
-
 const addHeroesList = () => {
     fetchHeroes()
         .then(res => renderHeroesList(res))
+        .then(cartRender());
 }
-const renderHeroesList = (heroesArray = []) => {
+const renderHeroesList = (heroesArray) => {
+    removeOldHtmlElement('.heroes');
     document.querySelector('#homePage').insertAdjacentHTML('beforeend',  `
         <div class="heroes">
             ${heroesArray.map((hero, key) => 
@@ -207,10 +212,12 @@ const addSelectListToForm = () => {
 }
 
 const renderSelectListToForm = (heroesList) => {
-    document.querySelectorAll('sele')
+    document.querySelectorAll('.form__select').forEach(selectHtml => {
+        selectHtml.remove();
+    });
     document.querySelectorAll('#editHeroForm h1, #deleteHeroForm h1').forEach(form => {
         form.insertAdjacentHTML("afterend", `
-            <select name="select" class="form__input">
+            <select name="select" class="form__select">
                 ${heroesList.map(hero => (`
                     <option value="${hero.name}">${hero.name}</option>
                 `)).join('')}
@@ -280,11 +287,7 @@ const hiddenAllModals = () => {
 //menu link and changing page script
 const hashHandler = () => {
     const header = document.querySelector('.header');
-    // lastVisitedPage.classList.add('hidden')
-    lastVisitedPage = window.location.hash;
-    console.log(lastVisitedPage);
-    hiddenAllModals();
-    
+    hiddenAllModals();  
     switch (window.location.hash) {
         case '#/add-hero':
            header.classList.remove('header--main');   
@@ -315,6 +318,7 @@ const hashHandler = () => {
         case '#/index':
             header.classList.add('header--main');
             addHeroesList();
+            homePage.classList.remove('hidden')      
         break;
     }
 };
@@ -323,7 +327,7 @@ const init = () => {
     
     //after page refresh always back or rerender index
     window.location.hash = '#/index';
-    fetchHeroes();
+    addHeroesList();
 }
 
 init();
