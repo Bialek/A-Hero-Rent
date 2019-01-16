@@ -1,6 +1,11 @@
 let lastHeroFetched = [];
 const URL = '/heroes/';
 const loader = document.querySelector('.loader');
+let lastVisitedPage;
+const homePage = document.querySelector('#homePage');
+const addHeroPage = document.querySelector('#addHeroPage');
+const editHeroPage = document.querySelector('#editHeroPage');
+const deleteHeroPage = document.querySelector('#deleteHeroPage');
 
 // mobile menu script
 const openCloseMenu = () => {
@@ -202,6 +207,7 @@ const addSelectListToForm = () => {
 }
 
 const renderSelectListToForm = (heroesList) => {
+    document.querySelectorAll('sele')
     document.querySelectorAll('#editHeroForm h1, #deleteHeroForm h1').forEach(form => {
         form.insertAdjacentHTML("afterend", `
             <select name="select" class="form__input">
@@ -268,23 +274,31 @@ const loadDefaultDb = () => {
         fetchNewHero(hero.name, hero.image, hero.price, hero.description, hero.isAvailable);
     })
 };
-
+const hiddenAllModals = () => {
+    document.querySelectorAll('section').forEach(modal => modal.classList.add('hidden'));
+}
 //menu link and changing page script
 const hashHandler = () => {
     const header = document.querySelector('.header');
+    // lastVisitedPage.classList.add('hidden')
+    lastVisitedPage = window.location.hash;
+    console.log(lastVisitedPage);
+    hiddenAllModals();
+    
     switch (window.location.hash) {
         case '#/add-hero':
            header.classList.remove('header--main');   
-           renderAddHeroPage();     
+           addHeroPage.classList.remove('hidden');     
         break;
         case '#/edit-hero':
            header.classList.remove('header--main');   
            addSelectListToForm();
-           renderEditHeroPage();     
+           editHeroPage.classList.remove('hidden');  
         break;
         case '#/delete-hero':
             header.classList.remove('header--main');   
             addSelectListToForm();   
+            deleteHeroPage.classList.remove('hidden')
         break;
         case '#/clean-db':
             cleanDB();
@@ -319,6 +333,8 @@ document.querySelectorAll('a[href').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.hash = `/${link.getAttribute('href')}`;
-        openCloseMenu();
+        if (link.getAttribute('href') !== 'index') {
+            openCloseMenu();
+        }    
     });
 });

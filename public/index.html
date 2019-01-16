@@ -73,11 +73,6 @@
         <section class="container" id="editHeroPage">
             <form id="editHeroForm" class="form">
                 <h1 class="form__title">Edytuj Herosa</h1>
-                <select name="select" class="form__input" form="editForm">
-                    <!-- ${lastHeroeslistfetched.map(hero => (`
-                        <option value="${hero.name}">${hero.name}</option>
-                    `))} -->
-                </select>
                 <input name="img" class="form__input" type="text" placeholder="Adres/nazwa zdjęcia">
                 <input type="number" name="price" class="form__input" type="text" placeholder="Cena wynajmu /h" required>
                 <textarea name="description" class="form__input" rows="3" placeholder="Opis Bohatera"></textarea>
@@ -88,7 +83,6 @@
         <section class="container" id="deleteHeroPage">
             <form id="deleteHeroForm" class="form">
                 <h1 class="form__title">Usuń Heroesa</h1>
-    
                 <button class="form__btn" type="submit">Usuń</button>
             </form>
         </section>
@@ -96,7 +90,6 @@
 
     <footer class="footer">
         <span class="footer__description">Need a Hero-Pure JS/CSS Aplikacja do ćwiczenia nabytej wiedzy o JavaScript</span>
-        <a class="footer__description" href="http://bialekrafal.pl/">Białek Rafał</a>
     </footer>
 
     <script src="./scripts.js"></script>

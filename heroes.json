@@ -27,6 +27,20 @@
       "price": "123",
       "description": "ad",
       "isAvailable": true
+    },
+    {
+      "name": "deadpool",
+      "image": "https://is2-ssl.mzstatic.com/image/thumb/Video1/v4/bb/d2/a9/bbd2a966-fd49-8721-f51d-0042092f11a4/pr_source.lsr/268x0w.png",
+      "price": "100000",
+      "description": "asad",
+      "isAvailable": true
+    },
+    {
+      "name": "ghostrider",
+      "image": "https://images-na.ssl-images-amazon.com/images/S/cmx-images-prod/Item/16950/DEC072183._SX360_QL80_TTD_.jpg",
+      "price": "999",
+      "description": "ghostrider",
+      "isAvailable": true
     }
   ]
 }
