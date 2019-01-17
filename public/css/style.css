@@ -785,24 +785,36 @@ body {
   color: #fff;
   text-transform: uppercase;
   position: relative;
-  border-right: 2px solid #fff;
-  width: 80%;
+  width: 100%;
+  line-height: 50px;
+  position: relative;
+}
+
+.cart__btnText:after {
+  content: "";
+  width: 2px;
+  height: 60%;
+  position: absolute;
+  background-color: #fff;
+  right: 0;
+  top: 20%;
 }
 
 .cart__btnIcon {
-  width: 15px;
-  height: 15px;
+  width: 40px;
+  height: 50px;
   position: relative;
-  margin: 0 10px;
 }
 
 .cart__btnIcon:after, .cart__btnIcon:before {
   position: absolute;
   content: "";
-  width: 100%;
+  width: 25px;
   height: 2px;
-  top: 7px;
+  top: 23px;
   left: 0;
+  right: 0;
+  margin: 0 auto;
   background-color: #fff;
 }
 

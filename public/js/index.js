@@ -1,3 +1,4 @@
+//global variables
 let lastHeroFetched = [];
 const URL = '/heroes/';
 const loader = document.querySelector('.loader');
@@ -12,15 +13,15 @@ const openCloseMenu = () => {
     const nav = document.querySelector('.nav');
     nav.classList.toggle('nav--active');
 } 
-document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu, false); 
+document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu); 
 
 // loader 
 const hiddenShowLoader = () => {
-    loader.classList.toggle('hidden')
+    loader.classList.toggle('hidden');
 }
 
 //remove old html element 
-const removeOldHtmlElement = (selector) => {
+const removeOldHtmlElement = selector => {
     document.querySelectorAll(`${selector}`).forEach(list => list.remove()); 
 }
 //heroes list and hero detail script 
@@ -28,19 +29,19 @@ const fetchHeroes = () => {
     hiddenShowLoader();
     return fetch('/heroes')
         .then(res => res.json())
-        .then(data => { return data })
+        .then(data => { return data });
 };
 const addHeroesList = () => {
     fetchHeroes()
         .then(res => renderHeroesList(res))
         .then(cartRender());
-}
+};
 const renderHeroesList = (heroesArray) => {
     removeOldHtmlElement('.heroes');
     document.querySelector('#homePage').insertAdjacentHTML('beforeend',  `
         <div class="heroes">
             ${heroesArray.map((hero, key) => 
-                `<div key=${key} class="heroes__item" onclick="fetchHero('${hero.name}')">
+                `<div key=${key} class="heroes__item" id='${hero.name}')">
                     <img class="heroes__img" src="${hero.image}" alt="${hero.name}" />
                     <div class="heroes__textWrapper">
                         <h1 class="heroes__title">${hero.name}</h1>
@@ -50,10 +51,11 @@ const renderHeroesList = (heroesArray) => {
             ).join('')}
         </div>
     `);
-    hiddenShowLoader()
-}
+    document.querySelectorAll('.heroes__item').forEach(div => div.addEventListener('click', div => fetchHero(div.target.alt)));
+    hiddenShowLoader();
+};
 
-const fetchHero = (name) => {
+const fetchHero = name => {
     hiddenShowLoader();
     fetch(URL + name)
         .then(res => res.json())
@@ -75,31 +77,43 @@ const renderHeroDetails = (hero, cartArray = []) => {
                     <h1 class="hero__title">i'm the ${hero.name}!</h1>
                     <p class="hero__description">${hero.description}</p>
                     <span class="hero__price">Cena Wynajmu: ${hero.price} zł/h</span>
-                    ${hero.isAvailable && ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button onclick="addToCart()" class="hero__btn">dodaj do koszyka</button>` : `<span class="hero__status">bohater chwilo nie dostepny</span>`}
+                    ${hero.isAvailable && ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) ? `<button class="hero__btn">dodaj do koszyka</button>` : `<span class="hero__status">bohater chwilo nie dostepny</span>`}
                 </div>
-                <button onclick="closeDetails()" class="hero__close"></span>
+                <button class="hero__close"></span>
             </div>
         </div>
     `);
+    document.querySelectorAll('.hero__close').forEach(button => {
+       button.addEventListener('click', closeDetails); 
+    });
+    document.querySelectorAll('.hero__btn').forEach(button => {
+        button.addEventListener('click', () => addToCart());
+    });
     hiddenShowLoader();
-}
+};
 
 const closeDetails = () => {
     document.querySelector('.hero').remove();
 };
 
+const loadDataFromLocalStorage = () => {
+    let cart;
+    if (localStorage.cart) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    };
+    return cart;
+}
+
 // cart script
 const addToCart = (hero = lastHeroFetched, cartArray = []) => {
-    //load data from localStorage
-    if (localStorage.cart) {
-        cartArray = JSON.parse(localStorage.getItem('cart'));
-    }
 
+    cartArray = loadDataFromLocalStorage();
+    
     if ((cartArray.findIndex(cartItem => cartItem.name === hero.name)) === -1) { 
         const newCartArray = [...cartArray, hero];
         localStorage.setItem('cart', JSON.stringify(newCartArray)); 
         cartRender(newCartArray);
-    }  
+    };  
     closeDetails();
     renderHeroDetails(hero);
     hiddenShowLoader();
@@ -110,11 +124,8 @@ const cartRender = (cartArray = []) => {
     const cart = document.querySelector('.cart__main');
     if (cart) {
         cart.remove();
-    }
-    // load data from localStorage
-    if (localStorage.cart) {
-        cartArray = JSON.parse(localStorage.getItem('cart'));
-    }
+    };
+    cartArray = loadDataFromLocalStorage();
     //sum all cart elements and render
     const cartValueRender = document.querySelector('.cart__value');
     let cartValue =  0;
@@ -125,44 +136,50 @@ const cartRender = (cartArray = []) => {
 };
 
 // add to DOM cart main element
-const renderCartMain = (cartArray) => {
+const renderCartMain = cartArray => {
     document.querySelector('.cart').insertAdjacentHTML('beforeend', `     
         <div class="cart__main">
             ${!cartArray[0]? 'Twój koszyk jest pusty.' : renderCartContent(cartArray)}
         </div>  
     `);
-}
+    document.querySelectorAll('.cart__btn').forEach(button => {
+        button.addEventListener('click', button => {
+            console.log(button.target.parentElement.id);
+            
+            removeFromCart(button.target.parentElement.id);    
+        });
+    });
+};
 
 //rendering all cart content items
-const renderCartContent = (cartArray) => {
+const renderCartContent = cartArray => {
     return cartArray.map((cartItem, key) => `
-        <div key=${key} class="cart__item">
+        <div class="cart__item">
             <img class="cart__img" src="${cartItem.image}" alt="${cartItem.name}" />
             <div class="cart__itemContent">
                 <h3 class="cart__title">${cartItem.name}</h3>
                 <p class="cart__description">${cartItem.description}</p>
-                <button class="cart__btn" onclick="removeFromCart(${key})">
+                <button id="${key}" class="cart__btn">
                     <span class="cart__btnText">usuń z koszyka</span>
                     <span class="cart__btnIcon"></span>
                 </button>
             </div>
         </div> 
     `).join('');
-} 
+};
 
 
-const removeFromCart = (id) => {
-    //load data from localStorage
-    const cartArray = JSON.parse(localStorage.getItem('cart'));
+const removeFromCart = id => {
+    const cartArray = loadDataFromLocalStorage();
     //return cart item if key is different than id 
     const newCartArray = cartArray.filter((cartItem, key) => {
-        if (key !== id) {
+        if (key !== parseInt(id)) {
             return cartItem;
         }
     });
     localStorage.setItem('cart', JSON.stringify(newCartArray));
     cartRender();
-}
+};
 
 // on submit form handler 
 
@@ -184,16 +201,18 @@ handlerOnSubmitForm = () => {
     }
     cleanInput();
     hiddenShowLoader();
-}
+};
 
-document.querySelectorAll('.form').forEach(form => form.addEventListener('submit', handlerOnSubmitForm));
+document.querySelectorAll('.form').forEach(form => {
+    form.addEventListener('submit', handlerOnSubmitForm);
+});
 
 //clean input filds after sumit 
 const cleanInput = () => {
     document.querySelectorAll('.form__input').forEach(input => {
         input.value = '';
     });
-}
+};
 
 // add hero page script
 
@@ -208,8 +227,8 @@ const fetchNewHero = (name, image, price, description, isAvailable = true) => {
             description: description,
             isAvailable: isAvailable
         })
-    })
-}
+    });
+};
 
 const fetchEditHero = (name, image, price, description,) => {
     fetch(URL + name, {
@@ -223,22 +242,24 @@ const fetchEditHero = (name, image, price, description,) => {
         })
     })
     .then(addSelectListToForm());
-}
+};
 
 const fetchDeleteHero = (name = '') => {
     fetch(URL + name, {
         method: 'DELETE',
     })
     .then(addSelectListToForm());
-}
+};
 
 //dynamic adding select hero list to edit and delete form 
 const addSelectListToForm = () => {
     fetchHeroes()
-    .then(res => renderSelectListToForm(res));
-}
+    .then(res => {
+        renderSelectListToForm(res);
+    });
+};
 
-const renderSelectListToForm = (heroesList) => {
+const renderSelectListToForm = heroesList => {
     document.querySelectorAll('.form__select').forEach(selectHtml => {
         selectHtml.remove();
     });
@@ -249,15 +270,15 @@ const renderSelectListToForm = (heroesList) => {
                     <option value="${hero.name}">${hero.name}</option>
                 `)).join('')}
             </select>
-        `)
+        `);
     });
     hiddenShowLoader();
-}
+};
 
 
 // clean heroes database
 const cleanDB = () => {
-    fetchDeleteHero()
+    fetchDeleteHero();
 };
 // default heroes database
 const defaultHeroes = [
@@ -308,11 +329,11 @@ const defaultHeroes = [
 const loadDefaultDb = () => {
     defaultHeroes.forEach(hero => {
         fetchNewHero(hero.name, hero.image, hero.price, hero.description, hero.isAvailable);
-    })
+    });
 };
 const hiddenAllModals = () => {
     document.querySelectorAll('section').forEach(modal => modal.classList.add('hidden'));
-}
+};
 //menu link and changing page script
 const hashHandler = () => {
     const header = document.querySelector('.header');
@@ -347,10 +368,10 @@ const hashHandler = () => {
             addHeroesList();
             homePage.classList.remove('hidden')      
         break;
-    }
+    };
 };
 const init = () => {
-    window.addEventListener('hashchange', hashHandler, false);
+    window.addEventListener('hashchange', hashHandler);
     
     //after page refresh always back or rerender index
     window.location.hash = '#/index';
@@ -361,7 +382,7 @@ init();
 
 //add event listeners to a href
 document.querySelectorAll('a[href').forEach(link => {
-    link.addEventListener('click', (e) => {
+    link.addEventListener('click', e => {
         e.preventDefault();
         window.location.hash = `/${link.getAttribute('href')}`;
         if (link.getAttribute('href') !== 'index') {
