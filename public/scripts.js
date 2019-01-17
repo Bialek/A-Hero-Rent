@@ -14,17 +14,21 @@ const openCloseMenu = () => {
 } 
 document.querySelector('.nav__mobile').addEventListener('click', openCloseMenu, false); 
 
+// loader 
+const hiddenShowLoader = () => {
+    loader.classList.toggle('hidden')
+}
+
 //remove old html element 
 const removeOldHtmlElement = (selector) => {
     document.querySelectorAll(`${selector}`).forEach(list => list.remove()); 
 }
 //heroes list and hero detail script 
 const fetchHeroes = () => {
-    loader.classList.remove('hidden');
+    hiddenShowLoader();
     return fetch('/heroes')
         .then(res => res.json())
         .then(data => { return data })
-        .then(loader.classList.add('hidden'))
 };
 const addHeroesList = () => {
     fetchHeroes()
@@ -45,16 +49,18 @@ const renderHeroesList = (heroesArray) => {
                 </div>`
             ).join('')}
         </div>
-    `)
+    `);
+    hiddenShowLoader()
 }
 
 const fetchHero = (name) => {
+    hiddenShowLoader();
     fetch(URL + name)
         .then(res => res.json())
         .then(data => {
             renderHeroDetails(data)
             lastHeroFetched = data
-        })
+        });
 };
 
 const renderHeroDetails = (hero, cartArray = []) => {
@@ -75,6 +81,7 @@ const renderHeroDetails = (hero, cartArray = []) => {
             </div>
         </div>
     `);
+    hiddenShowLoader();
 }
 
 const closeDetails = () => {
@@ -113,29 +120,35 @@ const cartRender = (cartArray = []) => {
     cartArray.forEach(cartItem => {cartValue += parseInt(cartItem.price)});
     cartValueRender.textContent = cartValue + ',00 zł';
     
-    //rendering all cart elements
-    const cartArrayRender = () => {
-        return cartArray.map((cartItem, key) => `
-            <div key=${key} class="cart__item">
-                <img class="cart__img" src="${cartItem.image}" alt="${cartItem.name}" />
-                <div class="cart__itemContent">
-                    <h3 class="cart__title">${cartItem.name}</h3>
-                    <p class="cart__description">${cartItem.description}</p>
-                    <button class="cart__btn" onclick="removeFromCart(${key})">
-                        <span class="cart__btnText">usuń z koszyka</span>
-                        <span class="cart__btnIcon"></span>
-                    </button>
-                </div>
-            </div> 
-        `).join('');
-    }
-    //rendering cart  and main
+    renderCartMain(cartArray);
+};
+
+// add to DOM cart main element
+const renderCartMain = (cartArray) => {
     document.querySelector('.cart').insertAdjacentHTML('beforeend', `     
         <div class="cart__main">
-            ${!cartArray[0]? 'Twój koszyk jest pusty.' : cartArrayRender()}
+            ${!cartArray[0]? 'Twój koszyk jest pusty.' : renderCartContent(cartArray)}
         </div>  
     `);
-};
+}
+
+//rendering all cart content items
+const renderCartContent = (cartArray) => {
+    return cartArray.map((cartItem, key) => `
+        <div key=${key} class="cart__item">
+            <img class="cart__img" src="${cartItem.image}" alt="${cartItem.name}" />
+            <div class="cart__itemContent">
+                <h3 class="cart__title">${cartItem.name}</h3>
+                <p class="cart__description">${cartItem.description}</p>
+                <button class="cart__btn" onclick="removeFromCart(${key})">
+                    <span class="cart__btnText">usuń z koszyka</span>
+                    <span class="cart__btnIcon"></span>
+                </button>
+            </div>
+        </div> 
+    `).join('');
+} 
+
 
 const removeFromCart = (id) => {
     //load data from localStorage
@@ -154,6 +167,7 @@ const removeFromCart = (id) => {
 
 handlerOnSubmitForm = () => {
     event.preventDefault();
+    hiddenShowLoader();
     switch (event.target.id) {
         case 'addHeroForm':
             fetchNewHero(event.target[0].value, event.target[1].value, event.target[2].value, event.target[3].value)     
@@ -167,9 +181,19 @@ handlerOnSubmitForm = () => {
         default:
             break;
     }
+    cleanInput();
+    hiddenShowLoader();
 }
 
 document.querySelectorAll('.form').forEach(form => form.addEventListener('submit', handlerOnSubmitForm));
+
+//clean input filds after sumit 
+const cleanInput = () => {
+    document.querySelectorAll('.form__input').forEach(input => {
+        input.value = '';
+    });
+}
+
 // add hero page script
 
 const fetchNewHero = (name, image, price, description, isAvailable = true) => {
@@ -197,12 +221,14 @@ const fetchEditHero = (name, image, price, description,) => {
             description: description,
         })
     })
+    .then(addSelectListToForm());
 }
 
 const fetchDeleteHero = (name = '') => {
     fetch(URL + name, {
         method: 'DELETE',
     })
+    .then(addSelectListToForm());
 }
 
 //dynamic adding select hero list to edit and delete form 
@@ -223,8 +249,10 @@ const renderSelectListToForm = (heroesList) => {
                 `)).join('')}
             </select>
         `)
-    })
+    });
+    hiddenShowLoader();
 }
+
 
 // clean heroes database
 const cleanDB = () => {
@@ -306,13 +334,11 @@ const hashHandler = () => {
         case '#/clean-db':
             cleanDB();
             localStorage.clear();
-            fetchHeroes();
-            header.classList.add('header--main');
+            window.location.hash = '#/index';
         break;
         case '#/load-default-hero':
             loadDefaultDb();
-            fetchHeroes();
-            header.classList.add('header--main');
+            window.location.hash = '#/index';
         break;
         default:
         case '#/index':
