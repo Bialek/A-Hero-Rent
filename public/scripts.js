@@ -102,6 +102,7 @@ const addToCart = (hero = lastHeroFetched, cartArray = []) => {
     }  
     closeDetails();
     renderHeroDetails(hero);
+    hiddenShowLoader();
 };
 
 const cartRender = (cartArray = []) => {

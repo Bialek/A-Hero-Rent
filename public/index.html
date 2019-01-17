@@ -10,7 +10,16 @@
 </head>
 <body>
     <header class="header header--main">
-        <img class="header__background" src="./images/home-slide01.jpg" alt="background">
+        <img
+            srcset="
+            ./images/home-slide-big.jpg 1440w,
+            ./images/home-slide-medium.jpg 1024w,
+            ./images/home-slide-small.jpg 640w,
+            "
+            src="./images/home-slide-big.jpg"
+            alt="background"
+            class="header__background"
+        >
         <nav class="nav">
             <a href="index">
                 <img class="nav__logo" src="./images/logo.png" alt="logo">
