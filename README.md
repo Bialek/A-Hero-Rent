@@ -1,4 +1,5 @@
 # Hero-Rent
 
-
-demo: https://bialek.github.io/Hero-Rent/
+Project start: 
+-npm start
+-http://localhost:3000
