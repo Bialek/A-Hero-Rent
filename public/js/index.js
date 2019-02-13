@@ -230,12 +230,15 @@ const hashHandler = () => {
             loadDefaultDb();
             window.location.hash = '#/index';
         break;
+        case '#/http://bialekrafal.pl/':
+        window.location.href = "http://bialekrafal.pl/";
+        break;
         default:
         case '#/index':
             header.classList.add('header--main');
             displayHeroesList();
             homePage.classList.remove('hidden')      
-        break;
+        break;       
     };
 };
 
